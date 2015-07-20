@@ -19,7 +19,7 @@ var renderDefault = function(router) {
 };
 
 
-// TODO: routeName
+// TODO: dashboard, account settings, admin
 /* */
 Router.route('/', {
         name: "home",

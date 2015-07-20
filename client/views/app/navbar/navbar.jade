@@ -1,7 +1,7 @@
 template(name="navbar")
    .container
       .nav-wrapper
-         a.brand-logo Planning Poker
+         a.brand-logo Plansson
          a.button-collapse(href='#', data-activates='mobile-nav')
             i.mdi-navigation-menu
          ul.right
@@ -18,6 +18,8 @@ template(name="nav_items")
       a(href='#') Home
    li
       a(href='#') Dashboard
+   if currentUser
+      a(href='#') Account
 
 template(name="account")
    span.mdi-action-settings
