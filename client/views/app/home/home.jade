@@ -3,7 +3,7 @@ template(name="home")
       +atForm
 
       with currentUser
-         h6 Signed in as
+         h6.center Signed in as
             each emails
                | {{address}}
          hr
@@ -14,34 +14,43 @@ template(name="show_rooms")
       a.btn-floating.btn-large.waves-effect.waves-light.green.right
          i.mdi-content-add Add
 
-
    .row
       .col.s12.m6
-         .card.blue-grey.darken-1
+         .card.blue-grey
             .card-content.white-text
                span.card-title Realm's planning room
                p
                   | For the eyes of Realm only
             .card-action
                a(href='/rooms/1') Go to room
-               span ETA THU 09.30
+               span.right ETA THU 09.30
 
       .col.s12.m6
-         .card.blue-grey.darken-1
+         .card.pink
             .card-content.white-text
                span.card-title Dhoze's room
                p
                   | Even Dhoze can do planning
             .card-action
                a(href='#') Go to room
-               span ETA FRI 08.30
+               span.right ETA FRI 08.30
 
       .col.s12.m6
-         .card.blue-grey.darken-1
+         .card.grey
             .card-content.white-text
                span.card-title Nordic Entertainment
                p
                   | Sam's playground
             .card-action
                a(href='#') Meet Sam
-               span ETA MON 10.00
+               span.right ETA MON 10.00
+
+      .col.s12.m6
+         .card.blue.darken-1
+            .card-content.white-text
+               span.card-title Nordic Entertainment
+               p
+                  | Sam's playground
+            .card-action
+               a(href='#') Meet Sam
+               span.right ETA MON 10.00

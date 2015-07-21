@@ -12,7 +12,7 @@ template(name="navbar")
                   +account
 
          ul#mobile-nav.side-nav.cyan
-            +nav_items
+            +nav_items_side
 
 template(name="nav_items")
    li
@@ -22,17 +22,11 @@ template(name="nav_items")
 
 template(name="nav_items_side")
    +nav_items
-   if currentUser
-      a(href='#') Account
-
-
 
 template(name="account")
    ul#account-dropdown.dropdown-content
       li
          a(href='#!') Profile
-      li
-         a(href='#!') Settings
       li.divider
       li
          a#sign-out Sign Out
