@@ -2,21 +2,122 @@ template(name="room")
    // with content
    .container
       .row
-         h1 Realm's planning room
-         p.flow-text ETA THU 09.30
-            span.right In Progress
-         h3.center Time: 5
-         h4.center Current Issue
+         br
+         .flow-text.center
+            b Realm's planning room
+         p.flow-text.eta
+            | ETA
+            span.green-text THU 09.30
+            // if inprogress
+            span.right.pink-text In Progress
+            // else
+               waiting for session to start / Now estimating
+         // if started
+         h4.center.time
+            | Time left:
+            span.red-text 5
+         // else
+            // Waiting for estimation to start
 
       .row
          .col.s12
             .card
                .card-content.lime.lighten-3.black-text
-                  span.card-title.black-text Feature #1
+                  span.card-title.black-text RMOB-1052
                   a.btn-floating.btn-large.waves-effect.waves-light.red.right
                      i ?
                   p
-                     b RMOB-1052
-                     | CMET Mobile: Prevent customer login sessions to time out
+                     b CMET Mobile
+                     | Prevent customer login sessions to time out
                .card-action
                   a(href='#') LINK TO YOUTRACK
+
+      // if estimating
+      .row
+         h5.center Your estimate
+         // .lime.lighten-4
+         h3.center
+            a.circle.estimate 0
+            a.estimate .5
+            a.estimate 1
+            a.estimate 2
+            a.estimate 3
+            a.estimate 5
+            a.estimate 8
+            a.estimate 13
+
+      // else
+         TODO: Average estimate
+
+      .row
+         h5.center Participants
+
+         ul.collection
+            li.collection-item.dismissable.avatar
+               img.circle(src='img/anon.svg', alt='')
+               span.title Per Jonsson
+               p
+                  | Mobile Web Realm
+               .poker-card.un-flipped.secondary-content
+                  br
+                  b ?
+            li.collection-item.dismissable.avatar
+               img.circle(src='img/anon.svg', alt='')
+               span.title Konstantinos Mesaikos
+               p
+                  | Mobile Web Realm
+               .poker-card.secondary-content
+                  br
+                  b 3
+            li.collection-item.dismissable.avatar
+               img.circle(src='img/anon.svg', alt='')
+               span.title Ioannis Pinnakoulakis
+               p
+                  | Mobile Web Realm
+               .poker-card.secondary-content
+                  br
+                  b 1
+
+
+      // .pink.lighten-4
+      //.row
+         h5.center Participants
+
+         .col.s6.m6.l4
+            .card-panel.grey.lighten-5.z-depth-1
+               .row.valign-wrapper
+                  .col.s4
+                     // alt = {{user}}
+                     img.circle.responsive-img(src='/img/anon.svg', alt='')
+                  .col.s8.center
+                     span.black-text
+                        | Per Jonsson
+                     .poker-card.un-flipped
+                        b ?
+
+         .col.s6.m6.l4
+            .card-panel.grey.lighten-5.z-depth-1
+               .row.valign-wrapper
+                  .col.s4
+                     // alt = {{user}}
+                     img.circle.responsive-img(src='/img/anon.svg', alt='')
+                  .col.s8.center
+                     span.black-text
+                        | Konstantinos Mesaikos
+                     .poker-card
+                        b 3
+
+         .col.s6.m6.l4
+            .card-panel.grey.lighten-5.z-depth-1
+               .row.valign-wrapper
+                  .col.s4
+                     // alt = {{user}}
+                     img.circle.responsive-img(src='/img/anon.svg', alt='')
+                  .col.s8
+                     span.black-text
+                        | Ioannis Pinnakoulakis
+                     .poker-card.center
+                        b 1
+
+
+

@@ -1,0 +1,40 @@
+.eta {
+  line-height: 0;
+}
+
+.time {
+  margin-bottom: 0;
+}
+
+.estimate {
+  cursor: pointer;
+
+  //border-radius: 5rem;
+  &:hover {
+    //background-color: rgba(198, 96, 199, 0.8);
+    color: aqua;
+    font-size: larger;
+  }
+  &:active {
+    color: aquamarine;
+    font-size: larger;
+  }
+}
+
+.poker-card {
+  text-align: center;
+  height: 2em;
+  width: 2em;
+  font-size: 3em;
+  border: 0.1rem solid rgba(10, 10, 10, 0.2);
+  border-radius: 10%;
+  background-color: #fff;
+  transition: box-shadow .25s;
+  box-shadow: 0 2px 5px 0 rgba(0, 0, 0, 0.16), 0 2px 10px 0 rgba(0, 0, 0, 0.12);
+
+  &.un-flipped {
+    background-color: #636363;
+    color: #fff;
+  }
+
+}
