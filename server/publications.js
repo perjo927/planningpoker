@@ -6,3 +6,8 @@ var publishCollection = function (collection) {
         return Collections.presentation[collection].find();
     });
 };
+
+// Collections to publish
+//ContentAreas.forEach(function (area) {
+//    publishCollection(area);
+//});
