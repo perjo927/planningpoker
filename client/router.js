@@ -34,7 +34,6 @@ Router.route('/', {
             var router = this;
             var collection = Collections.presentation["rooms"];
             var rooms = collection.find();
-            console.info("rooms", rooms);
 
             router.render('home', {
                 data: function () {
