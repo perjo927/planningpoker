@@ -33,3 +33,7 @@ Template.room_creator.events({
         Session.set("selectedRoomColor", event.target.value);
     }
 });
+
+Template.room_creator.helpers({
+
+});
