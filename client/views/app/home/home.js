@@ -23,9 +23,9 @@ Template.room_creator.events({
         var collection = Collections.presentation["rooms"];
         collection.insert(newRoom, function (error, _id) {
             if(!!error) {
-                console.error("Rooms.insert error", error)
+                //console.error("Rooms.insert error", error)
             } else {
-                console.info("Rooms.insert:", _id, newRoom)
+                //console.info("Rooms.insert:", _id, newRoom)
             }
         });
     },

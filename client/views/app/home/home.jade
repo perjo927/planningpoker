@@ -2,12 +2,13 @@ template(name="home")
    .container
       +atForm
 
-      h6.center Signed in as
-         with currentUser
-            each emails
-               | {{address}}
-      hr
-      +show_rooms
+      if currentUser
+         h6.center Signed in as
+            with currentUser
+               each emails
+                  | {{address}}
+         hr
+         +show_rooms
 
 template(name="show_rooms")
    h2 Rooms
@@ -16,13 +17,11 @@ template(name="show_rooms")
          i.mdi-content-add Add
    +room_creator
 
-   each rooms
-      .row
+   .row
+      each rooms
          +room_card
 
-
-
-
+//
 template(name="room_card")
    .col.s12.m6
       .card(class="{{color}}")
@@ -47,7 +46,7 @@ template(name="room_creator")
                      required title="(3 to 30 characters)" name="roomname")
                      label.active(for='roomname') Title
                   .input-field.col.s6.m4
-                     input#eta.validate(value='ETA THU 09.30', type='text' maxlength="15"
+                     input#eta.validate(value='THU 09.30', type='text' maxlength="15"
                      pattern=".{5,15}" required title="(5 to 15 characters)" name="eta")
                      label.active(for='eta') Planning time
                   .input-field.col.s6.m4
@@ -57,12 +56,20 @@ template(name="room_creator")
                         option(value='pink') Pink
                         option(value='blue') Blue
                         option(value='grey') Grey
+                        option(value='red') Red
+                        option(value='green') Green
+                        option(value='orange') Orange
+                        option(value='deep-purple') Purple
+                        option(value='indigo') Indigo
+                        option(value='cyan') Cyan
+                        option(value='teal') Teal
+                        option(value='brown') Brown
                .row
                   .input-field.col.s12.m6
                      input#description.validate(value='Room description', type='text' maxlength="50"
                      pattern=".{5,50}" required title="(5 to 50 characters)" name="description")
                      label.active(for='description') Description
-                  .col.s12.m3.center
+                  .col.s12.m6.center
                      br
                      a.modal-action.modal-close.waves-effect.waves-green.btn-flat.left(href="#") CANCEL
                      button.modal-action.modal-close.waves-effect.waves-green.btn.right(type='submit', name='action') CREATE
