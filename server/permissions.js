@@ -12,6 +12,6 @@ var fullAccess = {
     }
 };
 
-//ContentAreas.forEach(function (area) {
-//    Collections.presentation[area].allow(fullAccess);
-//});
+ContentAreas.forEach(function (area) {
+    Collections.presentation[area].allow(fullAccess);
+});

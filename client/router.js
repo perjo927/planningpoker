@@ -25,23 +25,21 @@ Router.route('/', {
         name: "home",
         loadingTemplate: "loading",
         layoutTemplate: "app",
-        //waitOn: function() {
-        //    return CreateSubscriptions([
-        //        "navbar",
-        //        "footer",
-        //        "home"
-        //    ]);
-        //},
+        waitOn: function() {
+            return CreateSubscriptions([
+                "rooms"
+            ]);
+        },
         action: function(){
             var router = this;
-            var params = router.params;
+            var collection = Collections.presentation["rooms"];
 
             router.render('home', {
-                //data: function () {
-                //    return {
-                //        content: VM.sections["home"].service.getContent()
-                //    }
-                //}
+                data: function () {
+                    return {
+                        rooms: collection.find()
+                    }
+                }
             });
 
             renderDefault(router);

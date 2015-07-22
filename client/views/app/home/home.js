@@ -17,11 +17,19 @@ Template.home.onRendered(function () {
 Template.room_creator.events({
     'submit form': function (event,template) {
         event.preventDefault();
-        var formContainer = parseForm(event);
+        var newRoom = parseForm(event);
+        newRoom.color = Session.get("selectedRoomColor");
 
-        console.debug("form submit", formContainer);
+        var collection = Collections.presentation["rooms"];
+        collection.insert(newRoom, function (error, _id) {
+            if(!!error) {
+                console.error("Rooms.insert error", error)
+            } else {
+                console.info("Rooms.insert:", _id, newRoom)
+            }
+        });
     },
     'change select': function (event, template) {
-        console.debug("select",event.target);
+        Session.set("selectedRoomColor", event.target.value);
     }
 });

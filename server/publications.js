@@ -7,7 +7,7 @@ var publishCollection = function (collection) {
     });
 };
 
-// Collections to publish
-//ContentAreas.forEach(function (area) {
-//    publishCollection(area);
-//});
+ // Collections to publish
+ContentAreas.forEach(function (area) {
+    publishCollection(area);
+});

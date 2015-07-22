@@ -16,7 +16,13 @@ template(name="show_rooms")
          i.mdi-content-add Add
    +room_creator
 
-   .row
+   // TODO: Room template
+   each rooms
+      .row
+         +room_card
+
+
+   //.row
       .col.s12.m6
          .card.blue-grey
             .card-content.white-text
@@ -26,7 +32,6 @@ template(name="show_rooms")
             .card-action
                a(href='/rooms/1') Go to room
                span.right ETA THU 09.30
-
       .col.s12.m6
          .card.pink
             .card-content.white-text
@@ -56,6 +61,16 @@ template(name="show_rooms")
             .card-action
                a(href='#') Meet Sam
                span.right ETA MON 10.00
+
+template(name="room_card")
+   .col.s12.m6
+      .card(class="{{color}}")
+         .card-content.white-text
+            span.card-title= roomname
+            p= description
+         .card-action
+            a(href='/rooms/{{_id}}') Go to room
+            span.right ETA {{eta}}
 
 template(name="room_creator")
    // Modal Structure
