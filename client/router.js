@@ -10,6 +10,29 @@ var renderDefault = function(router) {
     });
 };
 
+var setRoomViewer = function (viewers, roomId, userId, email) {
+    var myRoomViewer = viewers.findOne({
+        "roomId": roomId,
+        "userId": userId
+    });
+
+    if (!!myRoomViewer) {
+        Session.set("docViewer", myRoomViewer._id);
+    } else {
+        viewers.insert({
+            "roomId": roomId,
+            "userId": userId,
+            "email": email
+        }, function (error, id) {
+            if (!!error) {
+                //console.error(error);
+            } else {
+                Session.set("docViewer", id)
+            }
+        });
+    }
+};
+
 // TODO: dashboard, account settings, admin
 /* */
 Router.route('/', {
@@ -40,6 +63,7 @@ Router.route('/', {
 // TODO: If not meteor user - redirect / router.go to home
 
 
+
 Router.route('/rooms/:_id', {
         name: "room",
         loadingTemplate: "loading",
@@ -62,35 +86,15 @@ Router.route('/rooms/:_id', {
                 userId = user._id;
 
             // TODO: Fetch specific for all
-            var estimates = Collections.presentation["estimates"].findOne({"name": "Fibonacci Extended"}); // TODO: based on room
+            var estimates = Collections.presentation["estimates"].find();
             var estimations = Collections.presentation["estimations"].find({"roomId": roomId});
             var features = Collections.presentation["features"];
             var room = Collections.presentation["rooms"].findOne(roomId);
             var viewers = Collections.presentation["viewers"];
 
-            // TODO : extract method
-            var myRoomViewer = viewers.findOne({
-                "roomId": roomId,
-                "userId": userId
-            });
-
-            if (!!myRoomViewer) {
-                Session.set("docViewer", myRoomViewer._id);
-            } else {
-                viewers.insert({
-                    "roomId": roomId,
-                    "userId": userId,
-                    "email": email
-                }, function (error, id) {
-                    if(!!error) {
-                        //console.error(error);
-                    } else {
-                        Session.set("docViewer", id)
-                    }
-                });
-            }
-
+            setRoomViewer(viewers, roomId, userId, email);
             renderDefault(router);
+
             router.render('room', {
                 data: function () {
                     return {

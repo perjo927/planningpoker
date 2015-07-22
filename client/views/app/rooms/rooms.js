@@ -1,7 +1,6 @@
-Template.room.onDestroyed(function () {
-    console.log("WAT!", this);
+var makeUserLeaveRoom = function () {
     var docViewer = Session.get("docViewer");
-    //this.data.viewers.
+
     Collections.presentation["viewers"].remove(docViewer, function (error) {
         if(!!error) {
             console.error(error);
@@ -9,13 +8,39 @@ Template.room.onDestroyed(function () {
             console.info("Removed",docViewer)
         }
     })
+};
+
+var getEstimateUnit = function (roomEstimateUnit, estimatesCollection) {
+    var estimatesList = [];
+    var desiredEstimate = roomEstimateUnit;
+
+    estimatesCollection.forEach(function (element,index,array) {
+        if (element.name === desiredEstimate) {
+            estimatesList = element.list;
+        }
+    });
+
+    return estimatesList;
+};
+
+//
+Template.room.onDestroyed(function () {
+    makeUserLeaveRoom();
 });
 
 Template.room.helpers({
-    //"participants": function () {
-    //    var roomViewers = Session.get("roomViewers");
-    //    var thisRoomViewers = roomViewers[this.room._id];
-    //    console.debug(thisRoomViewers);
-    //    return thisRoomViewers;
-    //}
+    "isCreator": function (roomCreatorId) {
+        return Meteor.userId() === roomCreatorId;
+    }
+});
+
+Template.estimation.helpers({
+    "getEstimate": function () {
+      return getEstimateUnit(this.room.estimates, this.estimates);
+    }
+});
+Template.estimation_admin.helpers({
+    "getEstimate": function () {
+        return getEstimateUnit(this.room.estimates, this.estimates);
+    }
 });
