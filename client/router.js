@@ -52,13 +52,14 @@ Router.route('/rooms/:_id', {
         name: "room",
         loadingTemplate: "loading",
         layoutTemplate: "app",
-        //waitOn: function() {
-        //    return CreateSubscriptions([
-        //        "navbar",
-        //        "footer",
-        //        "bars"
-        //    ]);
-        //},
+        waitOn: function() {
+            return CreateSubscriptions([
+                "estimates",
+                "estimations",
+                "rooms",
+                "features" // TODO: subscribe only to relevant features
+            ]);
+        },
         action: function(){
             var router = this;
             var params = router.params;

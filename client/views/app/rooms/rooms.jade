@@ -5,6 +5,7 @@ template(name="room")
          br
          .flow-text.center
             b Realm's planning room
+            // TODO: if admin (You are admin)
          p.flow-text.eta
             | ETA
             span.green-text THU 09.30
@@ -20,6 +21,8 @@ template(name="room")
             // Waiting for estimation to start
 
       .row
+         // TODO: if admin (Create features) + mark as done
+         // TODO: fetch "features" - for room _id (findOne)
          .col.s12
             .card
                .card-content.lime.lighten-3.black-text
@@ -30,10 +33,11 @@ template(name="room")
                      b CMET Mobile
                      | Prevent customer login sessions to time out
                .card-action
-                  a(href='#') LINK TO YOUTRACK
+                  a(href='#') Go to YouTrack
 
       // if estimating
       .row
+         // TODO: if admin (Change estimate (type))
          h5.center Your estimate
          // .lime.lighten-4
          h4.center
@@ -51,7 +55,7 @@ template(name="room")
 
       .row
          h5.center Participants
-
+         // TODO: Fetch each user watching (Session?)
          ul.collection
             li.collection-item.dismissable.avatar
                img.circle(src='img/anon.svg', alt='')
