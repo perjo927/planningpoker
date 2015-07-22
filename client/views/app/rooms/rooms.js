@@ -1,5 +1,14 @@
 Template.room.onDestroyed(function () {
-     // Get viewers doc Id (from session) and remove doc
+    console.log("WAT!", this);
+    var docViewer = Session.get("docViewer");
+    //this.data.viewers.
+    Collections.presentation["viewers"].remove(docViewer, function (error) {
+        if(!!error) {
+            console.error(error);
+        } else {
+            console.info("Removed",docViewer)
+        }
+    })
 });
 
 Template.room.helpers({

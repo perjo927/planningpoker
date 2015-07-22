@@ -3,18 +3,9 @@ var renderDefault = function(router) {
 
     router.render('navbar', {
         to: "navbar"
-        //data: function () {
-        //    return {
-        //        content: VM.sections["navbar"].service.getContent()
-        //    }
-        //}
     });
     router.render('footer', {
         to: "footer"
-        //data: function () {
-        //    return {
-        //        content: VM.sections["footer"].service.getContent()
-        //    }
         //}
     });
 };
