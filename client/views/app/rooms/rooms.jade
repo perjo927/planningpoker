@@ -1,5 +1,4 @@
 template(name="room")
-   // with content
    .container
       .row
          br
@@ -54,6 +53,11 @@ template(name="room")
          TODO: Average estimate
 
       .row
+         // TODO: replace titles below with email for now
+         each viewers
+            | {{email}}
+
+         // TODO: Template for participants
          h5.center Participants
          // TODO: Fetch each user watching (Session?)
          ul.collection

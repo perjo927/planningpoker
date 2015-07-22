@@ -5,7 +5,6 @@ var parseForm = function(event) {
     form.forEach(function (element, index, array) {
         formContainer[element.name] = element.value;
     });
-
     return formContainer;
 };
 
