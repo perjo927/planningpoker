@@ -39,22 +39,16 @@ template(name="room")
 
       // if estimating
       .row
-         // TODO: estimate template, or maybe not necessary, just gonna be an 'a'
+         // TODO: Room settings for estimates,
          // TODO: if admin (Change estimate (type))
          h5.center Your estimate
          // .lime.lighten-4
-         h4.center
-            a.estimate 0
-            a.estimate .5
-            a.estimate 1
-            a.estimate 2
-            a.estimate 3
-            a.estimate 5
-            a.estimate 8
-            a.estimate 13
+         h5.center
+            each estimates.list
+               a.estimate= this
 
       // else
-         TODO: Average estimate
+         TODO: Average estimate (when estimated)
 
       .row
          h5.center Participants
