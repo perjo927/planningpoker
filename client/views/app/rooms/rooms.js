@@ -79,6 +79,7 @@ Template.estimation.helpers({
     }
 });
 
+//
 Template.estimation_admin.helpers({
     "getEstimate": function () {
         return getEstimateUnit(this.room.estimates, this.estimates);
@@ -87,9 +88,39 @@ Template.estimation_admin.helpers({
 
 Template.estimation_admin.events({
     "change select": function (event, template) {
-        //console.debug(event.target.value,template);
         updateRoomEstimate(template.data.room._id, event.target.value);
-        // TODO: Change room estimate to value
-        return ;
+    }
+});
+
+//
+Template.feature_card.helpers({
+    "isCreator": function (roomCreatorId) {
+        return isCreator(roomCreatorId);
+    },
+    "editingEstimate": function () {
+        return Session.get("editingEstimate");
+    },
+    "getEstimate": function () {
+        return getEstimateUnit(this.room.estimates, this.estimates);
+    },
+    "getFeature": function () {
+        var featuresList = this.features.find({roomId: this.room._id, state: "doing"}).fetch();
+        console.debug(featuresList);
+        // TODO: check count > 0, returnera tom lista eller placeholder-objekt med samma fields
+        // fetch top priority (0)
+        return featuresList[0];
+    }
+});
+
+Template.feature_card.events({
+    "click #set-new-estimate": function (event, template) {
+        console.debug(event,template);
+        Session.set("editingEstimate", true);
+    },
+    "change select": function (event, template) {
+        console.debug(event.target.value,template);
+        //updateFeatureEstimate(template.data.room._id, event.target.value);
+        //// TODO: Change feature estimate to value, get feature id from button click, or template data, or id
+        Session.set("editingEstimate", false);
     }
 });

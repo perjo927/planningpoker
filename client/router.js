@@ -100,7 +100,7 @@ Router.route('/rooms/:_id', {
                     return {
                         "estimates": estimates,
                         "estimations": estimations,
-                        "features:": features,
+                        "features": features,
                         "room": room,
                         "viewers": viewers.find({"roomId": roomId})
                     }

@@ -1,4 +1,6 @@
 // TODO: Leave room button, that will disconnect id from viewers collection
+// TODO: Bottom modal that shows a collection af all estimated and un-estimated features, right and left column
+
 template(name="room")
    .container
       .row
@@ -60,15 +62,23 @@ template(name="feature_card")
    .col.s12
       .card
          .card-content.lime.lighten-3.black-text
-            span.card-title.black-text RMOB-1052
-            a.btn-floating.btn-large.waves-effect.waves-light.red.right
-               // TODO: make this a button for setting the estimates. They can later be follewd up..
-               i ?
+            span.card-title.black-text {{getFeature.title}}
+            if editingEstimate
+               if isCreator room.creator
+                  .col.s3.right
+                     // TODO: Can be its own template
+                     select#new-estimate.browser-default
+                        option(value='', disabled='', selected='') Set value
+                        each getEstimate
+                           option(value='{{this}}')= this
+            else
+               a#set-new-estimate.btn-floating.btn-large.waves-effect.waves-light.red.right
+                  i {{getFeature.estimate}} ?
             p
-               b CMET Mobile
-               | Prevent customer login sessions to time out
+               b {{getFeature.subTitle}}
+               | {{getFeature.description}}
          .card-action
-            a(href='#') Go to YouTrack
+            a(href='{{getFeature.link}}') Go to YouTrack
 
 //
 template(name="estimation")
@@ -79,7 +89,6 @@ template(name="estimation")
 //
 template(name="estimation_admin")
    // TODO: if in progress
-
    .col.s12.m4
       h5.center Your estimate
     .col.s8.m4.offset-s2.offset-m4
