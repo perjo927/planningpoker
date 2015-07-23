@@ -33,6 +33,11 @@ var flipSessionInProgress = function (roomId, newValue) {
     });
 };
 
+var updateRoomEstimate = function (roomId, newValue) {
+    Collections.presentation["rooms"].update(roomId, {$set:
+    {estimates: newValue }
+    });
+};
 
 //
 Template.room.onDestroyed(function () {
@@ -73,8 +78,18 @@ Template.estimation.helpers({
         return getEstimateUnit(this.room.estimates, this.estimates);
     }
 });
+
 Template.estimation_admin.helpers({
     "getEstimate": function () {
         return getEstimateUnit(this.room.estimates, this.estimates);
+    }
+});
+
+Template.estimation_admin.events({
+    "change select": function (event, template) {
+        //console.debug(event.target.value,template);
+        updateRoomEstimate(template.data.room._id, event.target.value);
+        // TODO: Change room estimate to value
+        return ;
     }
 });
