@@ -34,19 +34,19 @@ Template.room.onDestroyed(function () {
 
 Template.room.helpers({
     "isCreator": function (roomCreatorId) {
-        return isCreator();
+        return isCreator(roomCreatorId);
     }
 });
 
 Template.room_header.helpers({
     "isCreator": function (roomCreatorId) {
-        return isCreator();
+        return isCreator(roomCreatorId);
     }
 });
 
 Template.timer.helpers({
     "isCreator": function (roomCreatorId) {
-        return isCreator();
+        return isCreator(roomCreatorId);
     }
 });
 
