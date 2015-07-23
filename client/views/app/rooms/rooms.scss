@@ -1,3 +1,11 @@
+.unlock {
+  cursor: pointer;
+
+  &:hover {
+    font-size: larger;
+  }
+}
+
 .eta {
   line-height: 0;
 }

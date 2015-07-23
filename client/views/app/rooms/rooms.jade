@@ -28,9 +28,9 @@ template(name="room_header")
       if isCreator room.creator
          span.pink-text (Admin)
          if room.sessionInProgress
-            span#unlock.mdi-action-lock-outline.right
+            span#unlock.mdi-action-lock-outline.green-text.right.unlock
          else
-            span#lock.mdi-action-loyalty.right
+            span#lock.mdi-action-lock.right.red-text.unlock
    p.flow-text.center.eta
       if room.sessionInProgress
          .pink-text In Progress

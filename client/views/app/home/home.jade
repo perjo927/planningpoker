@@ -30,7 +30,10 @@ template(name="room_card")
             p= description
          .card-action
             a(href='/rooms/{{_id}}') Go to room
-            span.right ETA {{eta}}
+            unless sessionInProgress
+               span.right ETA {{eta}}
+            else
+               span.right NOW IN PROGRESS
 
 template(name="room_creator")
    // Modal Structure

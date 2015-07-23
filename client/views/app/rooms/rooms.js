@@ -27,6 +27,13 @@ var isCreator = function (roomCreatorId) {
     return Meteor.userId() === roomCreatorId;
 };
 
+var flipSessionInProgress = function (roomId, newValue) {
+    Collections.presentation["rooms"].update(roomId, {$set:
+    {sessionInProgress: newValue }
+    });
+};
+
+
 //
 Template.room.onDestroyed(function () {
     makeUserLeaveRoom();
@@ -44,6 +51,17 @@ Template.room_header.helpers({
     }
 });
 
+
+// TODO: use common methods
+Template.room_header.events({
+    "click #lock": function (event, template) {
+        flipSessionInProgress(template.data.room._id, true);
+    },
+    "click #unlock": function (event, template) {
+        flipSessionInProgress(template.data.room._id, false);
+    }
+});
+
 Template.timer.helpers({
     "isCreator": function (roomCreatorId) {
         return isCreator(roomCreatorId);
@@ -52,7 +70,7 @@ Template.timer.helpers({
 
 Template.estimation.helpers({
     "getEstimate": function () {
-      return getEstimateUnit(this.room.estimates, this.estimates);
+        return getEstimateUnit(this.room.estimates, this.estimates);
     }
 });
 Template.estimation_admin.helpers({

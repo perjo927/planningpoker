@@ -72,7 +72,7 @@ Router.route('/rooms/:_id', {
             return CreateSubscriptions([
                 "estimates", // TODO: specific room subscriptions
                 "estimations", // TODO: specific room subscriptions
-                "rooms", // TODO: specific room subscriptions
+                "rooms", // TODO: specific room subscriptions, {_id: roomId}
                 "features", // TODO: subscribe only to relevant features
                 "viewers" // TODO: subscribe only to relevant viewers
             ]);
