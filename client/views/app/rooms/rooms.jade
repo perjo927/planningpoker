@@ -4,38 +4,34 @@ template(name="room")
       .row
          br
          // TODO: split into template
-         // TODO: _with_ room
          .flow-text.center
             b Realm's planning room
             if isCreator room.creator
                span.pink-text (Admin)
-         p.flow-text.eta
-            | ETA
-            span.green-text= room.eta
+               if room.sessionInProgress
+                  span#unlock.mdi-action-lock-outline.right
+               else
+                  span#lock.mdi-action-loyalty.right
+         p.flow-text.center.eta
             if room.sessionInProgress
-               span.right.pink-text In Progress
-               // TODO: layout placement
-               if isCreator room.creator
-                  span
-                     a.btn-flat (Lock)
+               .pink-text In Progress
             else
-               span.right.blue-text Not In Progress
-               // TODO: layout placement
-               if isCreator room.creator
-                  span
-                     a.btn-flat (Unlock)
+               | ETA &nbsp;
+               span.green-text= room.eta
 
-
-         if room.sessionInProgress
-            h4.center.time
-               | Time left:
-               span.red-text 5
+         if countingDown
+            unless averageReady
+               h4.center.time
+                  | Time left:
+                  span.red-text 5
+            else
+               h4.center.time
+                  | Average: 3
          else
-            h4.center Waiting for countdown
-         if isCreator room.creator
-            .center
-               #timer-start.btn.red Start timer
-
+            if isCreator room.creator
+               if room.sessionInProgress
+                  .center
+                     #timer-start.btn.red Start timer
       .row
          // TODO: if admin (Create features) + mark as done
          +feature_card
@@ -56,6 +52,7 @@ template(name="room_header")
 
 // TODO: if admin (Create features) + mark as done
 template(name="feature_card")
+   h5.center Ready for estimation
    .col.s12
       .card
          .card-content.lime.lighten-3.black-text
@@ -76,15 +73,13 @@ template(name="estimation")
          a.estimate= this
 //
 template(name="estimation_admin")
-   // TODO: if inprogrss
+   // TODO: if in progress
 
-   .col.s5.m4
+   .col.s12.m4
       h5.center Your estimate
-   .col.s2.m4
-      | &nbsp;
-   .col.s5.m4
+    .col.s8.m4.offset-s2.offset-m4
       select#estimates.browser-default
-         option(value='', disabled='', selected='') Select estimate unit
+         option(value='', disabled='', selected='') Select estimation unit
          each estimates
             option(value='{{name}}')= name
    .col.s12
@@ -106,6 +101,7 @@ template(name="participants")
                span.title= email
                p
                   | Mobile Web Realm
-               .poker-card.un-flipped.secondary-content
+               // un-flipped shows the back. TODO: toggle
+               .poker-card.un-flipped.secondary-content.right
                   br
                   b ?
