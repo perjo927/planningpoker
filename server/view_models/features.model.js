@@ -1,9 +1,9 @@
 var sampleFeature = {
-    roomId: "57N4j9RNzyaL7MsSA",
-    title: "RMOB-1052",
-    brand: "CMET Mobile",
-    description: "Prevent customer login sessions to time out",
-    link: "https://tracking.betsson.local/issue/RMOB-1519",
+    roomId: "123xyz",
+    title: "Out of features",
+    brand: "Please",
+    description: "create new features if you are admin.",
+    link: "#",
     estimate: "?",
     state: "doing" // todo, doing, done
 };

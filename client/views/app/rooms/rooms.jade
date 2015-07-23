@@ -22,7 +22,15 @@ template(name="room")
          h5.center Participants
          +participants
 
-// TODO:
+      if isCreator room.creator
+         .fixed-action-btn#edit-features
+            a.btn-floating.btn-large.green.modal-trigger(href="#feature-creator")
+               i.mdi-editor-mode-edit
+
+   //
+   +feature_editor
+
+//
 template(name="room_header")
    .flow-text.center
       b Realm's planning room
@@ -73,9 +81,9 @@ template(name="feature_card")
                            option(value='{{this}}')= this
             else
                a#set-new-estimate.btn-floating.btn-large.waves-effect.waves-light.red.right
-                  i {{getFeature.estimate}} ?
+                  i {{getFeature.estimate}}
             p
-               b {{getFeature.subTitle}}
+               b {{getFeature.brand}}
                | {{getFeature.description}}
          .card-action
             a(href='{{getFeature.link}}') Go to YouTrack
@@ -101,8 +109,56 @@ template(name="estimation_admin")
          each getEstimate
             a.estimate= this
 
-// else
-   TODO: Average estimate (when estimated)
+//
+template(name="feature_editor")
+   // Modal Structure
+   #feature-creator.modal.bottom-sheet
+      .modal-content
+         .row
+            .col.s4.m4
+               p.flow-text
+                  b Todo
+                  span.mdi-action-note-add.cyan-text
+            .col.s4.m4
+               p.flow-text
+                  b Doing
+            .col.s4.m4
+               p.flow-text
+                  b Done
+         //
+         .row
+            // each getFeature todo
+            .col.s4.m4
+               +feature_column
+            // each getFeature doing
+            .col.s4.m4
+               +feature_column
+            // each getFeature done
+            .col.s4.m4
+               +feature_column
+
+      .modal-footer
+         //hr
+         a.modal-action.modal-close.waves-effect.waves-green.btn-flat.right CANCEL
+
+//
+template(name="feature_column")
+      ul.collection
+         li.collection-item.avatar
+            // TODO: Fetch featureId
+            i.mdi-editor-mode-edit.circle.edit-feature(class="{{featureId}}")
+            span.title Title
+            p
+               | Brand
+               br
+               |          Description
+            a.secondary-content
+               i.mdi-action-highlight-remove
+               // TODO: Estimate
+               br
+               p.flow-text ?
+
+//TODO: Average estimate (when estimated)
 
 // TODO: Populate with more user data
 // TODO : Get estimations for cards, flip and unflip

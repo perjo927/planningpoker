@@ -40,6 +40,11 @@ var updateRoomEstimate = function (roomId, newValue) {
 };
 
 //
+Template.room.onRendered(function () {
+    this.$('.modal-trigger').leanModal();
+});
+
+// TODO: same action as when leaving manually
 Template.room.onDestroyed(function () {
     makeUserLeaveRoom();
 });
@@ -103,10 +108,24 @@ Template.feature_card.helpers({
     "getEstimate": function () {
         return getEstimateUnit(this.room.estimates, this.estimates);
     },
-    "getFeature": function () {
+    // TODO: Extract method
+    "getFeature": function (state) {
         var featuresList = this.features.find({roomId: this.room._id, state: "doing"}).fetch();
         console.debug(featuresList);
-        // TODO: check count > 0, returnera tom lista eller placeholder-objekt med samma fields
+
+        //
+        if (featuresList.length === 0 ) {
+            return {
+                roomId: "123xyz",
+                title: "Out of features",
+                brand: "Please",
+                description: "create new features if you are admin.",
+                link: "#",
+                estimate: "?",
+                state: "doing" // todo, doing, done
+            }
+        }
+
         // fetch top priority (0)
         return featuresList[0];
     }
