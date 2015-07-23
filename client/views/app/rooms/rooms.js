@@ -23,6 +23,10 @@ var getEstimateUnit = function (roomEstimateUnit, estimatesCollection) {
     return estimatesList;
 };
 
+var isCreator = function (roomCreatorId) {
+    return Meteor.userId() === roomCreatorId;
+};
+
 //
 Template.room.onDestroyed(function () {
     makeUserLeaveRoom();
@@ -30,7 +34,19 @@ Template.room.onDestroyed(function () {
 
 Template.room.helpers({
     "isCreator": function (roomCreatorId) {
-        return Meteor.userId() === roomCreatorId;
+        return isCreator();
+    }
+});
+
+Template.room_header.helpers({
+    "isCreator": function (roomCreatorId) {
+        return isCreator();
+    }
+});
+
+Template.timer.helpers({
+    "isCreator": function (roomCreatorId) {
+        return isCreator();
     }
 });
 

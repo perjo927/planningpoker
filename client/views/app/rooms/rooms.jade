@@ -2,36 +2,10 @@
 template(name="room")
    .container
       .row
+         +room_header
          br
-         // TODO: split into template
-         .flow-text.center
-            b Realm's planning room
-            if isCreator room.creator
-               span.pink-text (Admin)
-               if room.sessionInProgress
-                  span#unlock.mdi-action-lock-outline.right
-               else
-                  span#lock.mdi-action-loyalty.right
-         p.flow-text.center.eta
-            if room.sessionInProgress
-               .pink-text In Progress
-            else
-               | ETA &nbsp;
-               span.green-text= room.eta
+         +timer
 
-         if countingDown
-            unless averageReady
-               h4.center.time
-                  | Time left:
-                  span.red-text 5
-            else
-               h4.center.time
-                  | Average: 3
-         else
-            if isCreator room.creator
-               if room.sessionInProgress
-                  .center
-                     #timer-start.btn.red Start timer
       .row
          // TODO: if admin (Create features) + mark as done
          +feature_card
@@ -48,7 +22,37 @@ template(name="room")
 
 // TODO:
 template(name="room_header")
+   .flow-text.center
+      b Realm's planning room
+      // TODO: make work
+      if isCreator room.creator
+         span.pink-text (Admin)
+         if room.sessionInProgress
+            span#unlock.mdi-action-lock-outline.right
+         else
+            span#lock.mdi-action-loyalty.right
+   p.flow-text.center.eta
+      if room.sessionInProgress
+         .pink-text In Progress
+      else
+         | ETA &nbsp;
+         span.green-text= room.eta
 
+//
+template(name="timer")
+   if countingDown
+      unless averageReady
+         h4.center.time
+            | Time left:
+            span.red-text 5
+      else
+         h4.center.time
+            | Average: 3
+   else
+      if isCreator room.creator
+         if room.sessionInProgress
+            .center
+               #timer-start.btn.red Start timer
 
 // TODO: if admin (Create features) + mark as done
 template(name="feature_card")
@@ -58,6 +62,7 @@ template(name="feature_card")
          .card-content.lime.lighten-3.black-text
             span.card-title.black-text RMOB-1052
             a.btn-floating.btn-large.waves-effect.waves-light.red.right
+               // TODO: make this a button for setting the estimates. They can later be follewd up..
                i ?
             p
                b CMET Mobile
