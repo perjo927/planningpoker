@@ -1,5 +1,11 @@
 .back, .forward {
-  cursor: pointer
+  cursor: pointer;
+  &:hover {
+    text-shadow: 0 0 10px #636363;
+  }
+  &:active {
+    text-shadow: 0 0 5px #636363;
+  }
 }
 
 /*  TODO: extract what's similar to common */
@@ -44,6 +50,9 @@
 
   &:hover {
     text-shadow: 0 0 20px #636363;
+  }
+  &:active {
+    text-shadow: 0 0 10px #636363;
   }
 }
 

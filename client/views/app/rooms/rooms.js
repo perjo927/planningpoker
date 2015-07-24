@@ -144,3 +144,16 @@ Template.feature_card.events({
         Session.set("editingEstimate", false);
     }
 });
+
+/* */
+Template.feature_editor.events({
+    "click .add-feature": function () {
+        Session.set("editingFeature", true);
+    }
+});
+
+Template.feature_editor.helpers({
+    "editingTodo": function () {
+        return Session.get("editingFeature");
+    }
+});

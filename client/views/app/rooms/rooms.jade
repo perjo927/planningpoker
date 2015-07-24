@@ -1,3 +1,4 @@
+// TODO: Break out templates into own files and own js in a folder - components
 // TODO: Leave room button, that will disconnect id from viewers collection
 // TODO: Bottom modal that shows a collection af all estimated and un-estimated features, right and left column
 
@@ -131,19 +132,43 @@ template(name="feature_editor")
                   span.mdi-navigation-arrow-back.back.done
          //
          .row
-            // each getFeature todo
-            .col.s4.m4
-               +feature_column
-            // each getFeature doing
-            .col.s4.m4
-               +feature_column
-            // each getFeature done
-            .col.s4.m4
-               +feature_column
+            if editingTodo
+               +feature_form
+            else
+               // each getFeature todo
+               .col.s4.m4
+                  +feature_column
+               // each getFeature doing
+               .col.s4.m4
+                  +feature_column
+               // each getFeature done
+               .col.s4.m4
+                  +feature_column
 
       .modal-footer
          //hr
          a.modal-action.modal-close.waves-effect.waves-green.btn-flat.right CANCEL
+
+//
+template(name="feature_form")
+   form#feature-form.col.s12
+      .row
+         .input-field.col.s6.m4
+            input#title.validate(value='Title', type='text' pattern=".{3,30}" maxlength="30"
+            required title="(3 to 30 characters)" name="title")
+            label.active(for='title') Feature title
+         .input-field.col.s6.m4
+            input#brnad.validate(value='Brand', type='text' maxlength="15"
+            pattern=".{5,15}" required title="(5 to 15 characters)" name="brand")
+            label.active(for='brand') Feature brand
+      .row
+         .input-field.col.s10.m6
+            input#description.validate(value='Description', type='text' maxlength="50"
+            pattern=".{5,50}" required title="(5 to 50 characters)" name="description")
+            label.active(for='description') Feature Description
+         .col.s2.m6.offset-m3
+            br
+            button.modal-action.modal-close.waves-effect.waves-green.btn.right(type='submit', name='action') CREATE
 
 //
 template(name="feature_column")
