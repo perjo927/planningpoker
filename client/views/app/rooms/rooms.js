@@ -149,6 +149,10 @@ Template.feature_card.events({
 Template.feature_editor.events({
     "click .add-feature": function () {
         Session.set("editingFeature", true);
+    },
+    "submit form": function (event, template) {
+        event.preventDefault();
+        // TODO: parse form
     }
 });
 
