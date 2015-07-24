@@ -1,3 +1,7 @@
+.back, .forward {
+  cursor: pointer
+}
+
 /*  TODO: extract what's similar to common */
 .add-feature {
   cursor: pointer;
@@ -39,7 +43,7 @@
   cursor: pointer;
 
   &:hover {
-    font-size: larger;
+    text-shadow: 0 0 20px #636363;
   }
 }
 
