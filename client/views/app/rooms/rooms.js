@@ -3,41 +3,45 @@ var makeUserLeaveRoom = function () {
 
     Collections.presentation["viewers"].remove(docViewer, function (error) {
         if(!!error) {
-            console.error(error);
+            //console.error(error);
         } else {
-            console.info("Removed",docViewer)
+            //console.info("Removed",docViewer)
         }
     })
 };
 
-var upsertFeature = function (newFeature, template, state) {
+var upsertFeature = function (id, newFeature, template, state) {
     newFeature.roomId = template.data.room._id;
-    newFeature.state = Session.get("selectedFeatureState");
-    var estimate = newFeature["estimate"];
+    newFeature.state = state;
 
     // If not previously estimated, insert, else update
-    if (!estimate) {
+    if (id === "new"){
         newFeature.estimate = "?";
         // TODO: extract method
         template.data.features.insert(newFeature, function (error, _id) {
-            if(!!error) {
-                console.error("Features.insert error", error)
+            if (!!error) {
+                //console.error("Features.insert error", error)
             } else {
-                console.info("Features.insert:", _id, newFeature)
+                //console.info("Features.insert:", _id, newFeature)
             }
         });
     } else {
-        var id = newFeature.id;
         // TODO: extract method
-        template.data.features.update(id, newFeature, function (error, _id) {
-            if(!!error) {
-                console.error("Features.insert error", error)
-            } else {
-                console.info("Features.insert:", _id, newFeature)
+        Object.keys(newFeature).forEach(function (key, index) {
+            if (key !== 'roomId') {
+                var field = {};
+                field[key] = newFeature[key];
+
+                template.data.features.update(id, {$set: field }, function (error, _id) {
+                    if(!!error) {
+                        //console.error("Features.update error", error)
+                    } else {
+                        //console.info("Features.update:", _id, newFeature)
+                    }
+                });
             }
         });
     }
-    console.debug("submit form",newFeature);
 };
 
 var getFeatures = function (state, context) {
@@ -176,7 +180,7 @@ Template.feature_card.helpers({
 Template.feature_card.events({
     "click #set-new-estimate": function (event, template) {
         if (template.data.room.creator === Meteor.userId()) {
-            Session.set("editingEstimate", true);
+            Session.set("editingEstimate", "todo");
         }
     },
     "change select": function (event, template) {
@@ -189,8 +193,11 @@ Template.feature_card.events({
 
 /* */
 Template.feature_editor.events({
+    "click #stop-editing": function () {
+        Session.set("editingFeature", false);
+    },
     "click .add-feature": function () {
-        Session.set("editingFeature", true);
+        Session.set("editingFeature", "new");
     },
     "change select": function (event, template) {
         Session.set("selectedFeatureState", event.target.value);
@@ -198,7 +205,9 @@ Template.feature_editor.events({
     "submit form": function (event, template) {
         event.preventDefault();
         var newFeature = App.parseForm(event);
-        upsertFeature(newFeature, template);
+        var id = Session.get("editingFeature");
+        var state = Session.get("selectedFeatureState");
+        upsertFeature(id, newFeature, template, state);
         Session.set("editingFeature", false);
     }
 });
@@ -210,5 +219,24 @@ Template.feature_editor.helpers({
     "getFeatures": function (state) {
         var featureList = getFeatures(state, this);
         return featureList;
+    }
+});
+
+/* */
+
+Template.feature_form.helpers({
+    "getEditingFeature": function () {
+        var featureId = Session.get("editingFeature", featureId);
+        var feature = this.features.findOne(featureId);
+        return feature;
+    }
+});
+
+
+/* */
+
+Template.feature_column.events({
+    "click .edit-feature": function (event, template) {
+        Session.set("editingFeature", this._id);
     }
 });

@@ -87,7 +87,7 @@ template(name="feature_card")
                b {{getFeature.brand}}
                | {{getFeature.description}}
          .card-action
-            a(href='{{getFeature.link}}' target="_blank") Go to YouTrack
+            a(href='{{getFeature.link}}' target="_blank") Go to Feature
 
 //
 template(name="estimation")
@@ -151,22 +151,22 @@ template(name="feature_editor")
 
       .modal-footer
          //hr
-         a.modal-action.modal-close.waves-effect.waves-green.btn-flat.right CANCEL
+         a#stop-editing.modal-action.modal-close.waves-effect.waves-green.btn-flat.right CANCEL
 
 //
 template(name="feature_form")
    form#feature-form.col.s12
       .row
          .input-field.col.s6.m4
-            input#title.validate(value='{{title}}', type='text' pattern=".{3,20}" maxlength="20"
+            input#title.validate(value='{{getEditingFeature.title}}', type='text' pattern=".{3,20}" maxlength="20"
             required title="(3 to 30 characters)" name="title")
             label.active(for='title') Feature title
          .input-field.col.s6.m4
-            input#brand.validate(value='{{brand}}', type='text' maxlength="20"
+            input#brand.validate(value='{{getEditingFeature.brand}}', type='text' maxlength="20"
             pattern=".{3,20}" required title="(3 to 20 characters)" name="brand")
             label.active(for='brand') Feature brand
          .input-field.col.s6.m4
-            input#link.validate(value='{{link}}', type='text' maxlength="30"
+            input#link.validate(value='{{getEditingFeature.link}}', type='text' maxlength="30"
             pattern=".{5,30}" required title="(5 to 30 characters)" name="link")
             label.active(for='link') Feature link
          .input-field.col.s6.m4
@@ -176,29 +176,28 @@ template(name="feature_form")
                option(value='doing') Doing
                option(value='done') Done
          .input-field.col.s12.m8
-            input#description.validate(value='{{description}}', type='text' maxlength="50"
+            input#description.validate(value='{{getEditingFeature.description}}', type='text' maxlength="50"
             pattern=".{5,50}" required title="(5 to 50 characters)" name="description")
             label.active(for='description') Feature Description
       .row
-            button.modal-action.waves-effect.waves-green.btn.left(type='submit', name='action') CREATE
+         button.modal-action.waves-effect.waves-green.btn.left(type='submit', name='action') CREATE
 
 //
 template(name="feature_column")
       ul.collection
          li.collection-item.avatar
-            // TODO: Fetch featureId
-            i.mdi-editor-mode-edit.circle.edit-feature.teal(name="{{_id}}")
-            span.title {{title}}
-            p
-               | {{brand}}
-               br
-               |          {{description}}
-            a.secondary-content
-               i.mdi-action-highlight-remove.remove-feature.pink-text
-               // TODO: Estimate
-               br
-               p.flow-text.feature-estimate
-                  b {{estimate}}
+               i.mdi-editor-mode-edit.circle.edit-feature.teal
+               span.title {{title}}
+               p
+                  | {{brand}}
+                  br
+                  |          {{description}}
+               a.secondary-content
+                  i.mdi-action-highlight-remove.remove-feature.pink-text
+                  // TODO: Estimate
+                  br
+                  p.flow-text.feature-estimate
+                     b {{estimate}}
 
 //TODO: Average estimate (when estimated)
 // TODO: Populate with more user data
