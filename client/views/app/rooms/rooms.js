@@ -133,8 +133,9 @@ Template.feature_card.helpers({
 
 Template.feature_card.events({
     "click #set-new-estimate": function (event, template) {
-        console.debug(event,template);
-        Session.set("editingEstimate", true);
+        if (template.data.room.creator === Meteor.userId()) {
+            Session.set("editingEstimate", true);
+        }
     },
     "change select": function (event, template) {
         console.debug(event.target.value,template);
