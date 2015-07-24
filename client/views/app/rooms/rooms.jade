@@ -87,7 +87,7 @@ template(name="feature_card")
                b {{getFeature.brand}}
                | {{getFeature.description}}
          .card-action
-            a(href='{{getFeature.link}}') Go to YouTrack
+            a(href='{{getFeature.link}}' target="_blank") Go to YouTrack
 
 //
 template(name="estimation")
@@ -116,7 +116,7 @@ template(name="feature_editor")
    #feature-creator.modal.bottom-sheet
       .modal-content
          .row
-            unless editingTodo
+            unless editingFeature
                .col.s4.m4
                   p.flow-text
                      b Todo
@@ -133,17 +133,17 @@ template(name="feature_editor")
                      span.mdi-navigation-arrow-back.back.done
          //
          .row
-            if editingTodo
+            if editingFeature
                +feature_form
             else
-               each getFeatures todo
-                  .col.s4.m4
+               .col.s4.m4
+                  each getFeatures 'todo'
                      +feature_column
-               each getFeatures doing
-                  .col.s4.m4
+               .col.s4.m4
+                  each getFeatures 'doing'
                      +feature_column
-               each getFeatures done
-                  .col.s4.m4
+               .col.s4.m4
+                  each getFeatures 'done'
                      +feature_column
 
       .modal-footer
@@ -152,20 +152,18 @@ template(name="feature_editor")
 
 //
 template(name="feature_form")
-   // TODO: template
-   // TODO: prefill template if not todo, if already existing feature
    form#feature-form.col.s12
       .row
          .input-field.col.s6.m4
-            input#title.validate(value='Title', type='text' pattern=".{3,30}" maxlength="30"
+            input#title.validate(value='{{title}}', type='text' pattern=".{3,20}" maxlength="20"
             required title="(3 to 30 characters)" name="title")
             label.active(for='title') Feature title
          .input-field.col.s6.m4
-            input#brand.validate(value='Brand', type='text' maxlength="15"
-            pattern=".{3,10}" required title="(3 to 10 characters)" name="brand")
+            input#brand.validate(value='{{brand}}', type='text' maxlength="20"
+            pattern=".{3,20}" required title="(3 to 20 characters)" name="brand")
             label.active(for='brand') Feature brand
          .input-field.col.s6.m4
-            input#link.validate(value='Link', type='text' maxlength="15"
+            input#link.validate(value='{{link}}', type='text' maxlength="30"
             pattern=".{5,30}" required title="(5 to 30 characters)" name="link")
             label.active(for='link') Feature link
          .input-field.col.s6.m4
@@ -175,7 +173,7 @@ template(name="feature_form")
                option(value='doing') Doing
                option(value='done') Done
          .input-field.col.s12.m8
-            input#description.validate(value='Description', type='text' maxlength="50"
+            input#description.validate(value='{{description}}', type='text' maxlength="50"
             pattern=".{5,50}" required title="(5 to 50 characters)" name="description")
             label.active(for='description') Feature Description
       .row
@@ -186,21 +184,20 @@ template(name="feature_column")
       ul.collection
          li.collection-item.avatar
             // TODO: Fetch featureId
-            i.mdi-editor-mode-edit.circle.edit-feature.teal(class="{{featureId}}")
-            span.title Title
+            i.mdi-editor-mode-edit.circle.edit-feature.teal(name="{{_id}}")
+            span.title {{title}}
             p
-               | Brand
+               | {{brand}}
                br
-               |          Description
+               |          {{description}}
             a.secondary-content
                i.mdi-action-highlight-remove.remove-feature.pink-text
                // TODO: Estimate
                br
                p.flow-text.feature-estimate
-                  b ?
+                  b {{estimate}}
 
 //TODO: Average estimate (when estimated)
-
 // TODO: Populate with more user data
 // TODO : Get estimations for cards, flip and unflip
 template(name="participants")

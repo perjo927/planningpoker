@@ -10,6 +10,65 @@ var makeUserLeaveRoom = function () {
     })
 };
 
+var upsertFeature = function (newFeature, template, state) {
+    newFeature.roomId = template.data.room._id;
+    newFeature.state = Session.get("selectedFeatureState");
+    var estimate = newFeature["estimate"];
+
+    // If not previously estimated, insert, else update
+    if (!estimate) {
+        newFeature.estimate = "?";
+        // TODO: extract method
+        template.data.features.insert(newFeature, function (error, _id) {
+            if(!!error) {
+                console.error("Features.insert error", error)
+            } else {
+                console.info("Features.insert:", _id, newFeature)
+            }
+        });
+    } else {
+        var id = newFeature.id;
+        // TODO: extract method
+        template.data.features.update(id, newFeature, function (error, _id) {
+            if(!!error) {
+                console.error("Features.insert error", error)
+            } else {
+                console.info("Features.insert:", _id, newFeature)
+            }
+        });
+    }
+    console.debug("submit form",newFeature);
+};
+
+var getFeatures = function (state, context) {
+    if (!state) {
+        state = "doing"
+    }
+    var featuresList = context.features.find({roomId: context.room._id, state: state}).fetch();
+    return featuresList;
+};
+
+var getFeature = function (state, context) {
+    var featuresList = getFeatures(state, context);
+    //
+    if (featuresList.length === 0 ) {
+        return {
+            roomId: "123xyz",
+            title: "Out of features",
+            brand: "Please",
+            description: "create new features if you are admin.",
+            link: "#",
+            estimate: "?",
+            state: "doing" // todo, doing, done
+        }
+    }
+    // fetch top priority (0)
+    return featuresList[0];
+};
+
+
+
+
 var getEstimateUnit = function (roomEstimateUnit, estimatesCollection) {
     var estimatesList = [];
     var desiredEstimate = roomEstimateUnit;
@@ -108,29 +167,9 @@ Template.feature_card.helpers({
     "getEstimate": function () {
         return getEstimateUnit(this.room.estimates, this.estimates);
     },
-    // TODO: Extract method/s
     "getFeature": function (state) {
-        if (!state) {
-            state = "doing"
-        }
-        var featuresList = this.features.find({roomId: this.room._id, state: state}).fetch();
-        console.debug(featuresList);
-
-        //
-        if (featuresList.length === 0 ) {
-            return {
-                roomId: "123xyz",
-                title: "Out of features",
-                brand: "Please",
-                description: "create new features if you are admin.",
-                link: "#",
-                estimate: "?",
-                state: "doing" // todo, doing, done
-            }
-        }
-
-        // fetch top priority (0)
-        return featuresList[0];
+        var feature = getFeature(state, this);
+        return feature;
     }
 });
 
@@ -156,40 +195,20 @@ Template.feature_editor.events({
     "change select": function (event, template) {
         Session.set("selectedFeatureState", event.target.value);
     },
-    // TODO: Extract method
     "submit form": function (event, template) {
         event.preventDefault();
         var newFeature = App.parseForm(event);
-         newFeature.roomId = template.data.room._id;
-         newFeature.state = Session.get("selectedFeatureState");
+        upsertFeature(newFeature, template);
         Session.set("editingFeature", false);
-        console.debug("submit form",newFeature);
-        
-        template.data.features.insert(newFeature, function (error, _id) {
-            if(!!error) {
-                console.error("Features.insert error", error)
-            } else {
-                console.info("Features.insert:", _id, newFeature)
-            }
-        });
     }
 });
 
 Template.feature_editor.helpers({
-    "editingTodo": function () {
+    "editingFeature": function () {
         return Session.get("editingFeature");
     },
-
-    // TODO: Extract method/s,
     "getFeatures": function (state) {
-        var featuresList = this.features.find({roomId: this.room._id, state: state}).fetch();
-        console.debug(featuresList);
-
-        //
-        if (featuresList.length === 0 ) {
-            return [];
-        }
-
-        return featuresList;
+        var featureList = getFeatures(state, this);
+        return featureList;
     }
 });
