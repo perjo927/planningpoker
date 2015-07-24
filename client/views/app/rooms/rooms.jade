@@ -116,34 +116,35 @@ template(name="feature_editor")
    #feature-creator.modal.bottom-sheet
       .modal-content
          .row
-            .col.s4.m4
-               p.flow-text
-                  b Todo
-                  span.mdi-action-note-add.add-feature.cyan-text
-                  span.mdi-navigation-arrow-forward.forward.todo
-            .col.s4.m4
-               p.flow-text
-                  b Doing
-                  span.mdi-navigation-arrow-back.back.doing
-                  span.mdi-navigation-arrow-forward.forward.doing
-            .col.s4.m4
-               p.flow-text
-                  b Done
-                  span.mdi-navigation-arrow-back.back.done
+            unless editingTodo
+               .col.s4.m4
+                  p.flow-text
+                     b Todo
+                     span.mdi-action-note-add.add-feature.cyan-text
+                     span.mdi-navigation-arrow-forward.forward.todo
+               .col.s4.m4
+                  p.flow-text
+                     b Doing
+                     span.mdi-navigation-arrow-back.back.doing
+                     span.mdi-navigation-arrow-forward.forward.doing
+               .col.s4.m4
+                  p.flow-text
+                     b Done
+                     span.mdi-navigation-arrow-back.back.done
          //
          .row
             if editingTodo
                +feature_form
             else
-               // each getFeature todo
-               .col.s4.m4
-                  +feature_column
-               // each getFeature doing
-               .col.s4.m4
-                  +feature_column
-               // each getFeature done
-               .col.s4.m4
-                  +feature_column
+               each getFeatures todo
+                  .col.s4.m4
+                     +feature_column
+               each getFeatures doing
+                  .col.s4.m4
+                     +feature_column
+               each getFeatures done
+                  .col.s4.m4
+                     +feature_column
 
       .modal-footer
          //hr
@@ -151,6 +152,8 @@ template(name="feature_editor")
 
 //
 template(name="feature_form")
+   // TODO: template
+   // TODO: prefill template if not todo, if already existing feature
    form#feature-form.col.s12
       .row
          .input-field.col.s6.m4
@@ -158,17 +161,25 @@ template(name="feature_form")
             required title="(3 to 30 characters)" name="title")
             label.active(for='title') Feature title
          .input-field.col.s6.m4
-            input#brnad.validate(value='Brand', type='text' maxlength="15"
-            pattern=".{5,15}" required title="(5 to 15 characters)" name="brand")
+            input#brand.validate(value='Brand', type='text' maxlength="15"
+            pattern=".{3,10}" required title="(3 to 10 characters)" name="brand")
             label.active(for='brand') Feature brand
-      .row
-         .input-field.col.s10.m6
+         .input-field.col.s6.m4
+            input#link.validate(value='Link', type='text' maxlength="15"
+            pattern=".{5,30}" required title="(5 to 30 characters)" name="link")
+            label.active(for='link') Feature link
+         .input-field.col.s6.m4
+            select#state.browser-default
+               option(value='todo', disabled='', selected='') State
+               option(value='todo') Todo
+               option(value='doing') Doing
+               option(value='done') Done
+         .input-field.col.s12.m8
             input#description.validate(value='Description', type='text' maxlength="50"
             pattern=".{5,50}" required title="(5 to 50 characters)" name="description")
             label.active(for='description') Feature Description
-         .col.s2.m6.offset-m3
-            br
-            button.modal-action.modal-close.waves-effect.waves-green.btn.right(type='submit', name='action') CREATE
+      .row
+            button.modal-action.waves-effect.waves-green.btn.left(type='submit', name='action') CREATE
 
 //
 template(name="feature_column")

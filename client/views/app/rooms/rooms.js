@@ -108,9 +108,12 @@ Template.feature_card.helpers({
     "getEstimate": function () {
         return getEstimateUnit(this.room.estimates, this.estimates);
     },
-    // TODO: Extract method
+    // TODO: Extract method/s
     "getFeature": function (state) {
-        var featuresList = this.features.find({roomId: this.room._id, state: "doing"}).fetch();
+        if (!state) {
+            state = "doing"
+        }
+        var featuresList = this.features.find({roomId: this.room._id, state: state}).fetch();
         console.debug(featuresList);
 
         //
@@ -150,14 +153,43 @@ Template.feature_editor.events({
     "click .add-feature": function () {
         Session.set("editingFeature", true);
     },
+    "change select": function (event, template) {
+        Session.set("selectedFeatureState", event.target.value);
+    },
+    // TODO: Extract method
     "submit form": function (event, template) {
         event.preventDefault();
-        // TODO: parse form
+        var newFeature = App.parseForm(event);
+         newFeature.roomId = template.data.room._id;
+         newFeature.state = Session.get("selectedFeatureState");
+        Session.set("editingFeature", false);
+        console.debug("submit form",newFeature);
+        
+        template.data.features.insert(newFeature, function (error, _id) {
+            if(!!error) {
+                console.error("Features.insert error", error)
+            } else {
+                console.info("Features.insert:", _id, newFeature)
+            }
+        });
     }
 });
 
 Template.feature_editor.helpers({
     "editingTodo": function () {
         return Session.get("editingFeature");
+    },
+
+    // TODO: Extract method/s,
+    "getFeatures": function (state) {
+        var featuresList = this.features.find({roomId: this.room._id, state: state}).fetch();
+        console.debug(featuresList);
+
+        //
+        if (featuresList.length === 0 ) {
+            return [];
+        }
+
+        return featuresList;
     }
 });

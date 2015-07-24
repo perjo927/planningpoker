@@ -1,15 +1,7 @@
-var parseForm = function(event) {
-    var formContainer = {};
-    var form = $(event.target).serializeArray();
 
-    form.forEach(function (element, index, array) {
-        formContainer[element.name] = element.value;
-    });
-    return formContainer;
-};
 
 var createNewRoom = function (event) {
-    var newRoom = parseForm(event);
+    var newRoom = App.parseForm(event);
     newRoom.color = Session.get("selectedRoomColor");
     newRoom.creator = Meteor.userId();
     newRoom.sessionInProgress = false;
