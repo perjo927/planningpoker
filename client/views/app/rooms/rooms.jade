@@ -118,7 +118,7 @@ template(name="feature_editor")
             .col.s4.m4
                p.flow-text
                   b Todo
-                  span.mdi-action-note-add.cyan-text
+                  span.mdi-action-note-add.add-feature.cyan-text
             .col.s4.m4
                p.flow-text
                   b Doing
@@ -146,17 +146,18 @@ template(name="feature_column")
       ul.collection
          li.collection-item.avatar
             // TODO: Fetch featureId
-            i.mdi-editor-mode-edit.circle.edit-feature(class="{{featureId}}")
+            i.mdi-editor-mode-edit.circle.edit-feature.teal(class="{{featureId}}")
             span.title Title
             p
                | Brand
                br
                |          Description
             a.secondary-content
-               i.mdi-action-highlight-remove
+               i.mdi-action-highlight-remove.remove-feature.pink-text
                // TODO: Estimate
                br
-               p.flow-text ?
+               p.flow-text.feature-estimate
+                  b ?
 
 //TODO: Average estimate (when estimated)
 

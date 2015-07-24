@@ -1,3 +1,40 @@
+/*  TODO: extract what's similar to common */
+.add-feature {
+  cursor: pointer;
+
+  &:hover {
+    text-shadow: 0 0 10px blue;
+  }
+  &:active {
+    text-shadow: 0 0 5px blue;
+  }
+}
+.edit-feature {
+  cursor: pointer;
+
+  &:hover {
+    box-shadow: 0 0 1.5rem 0 green;
+  }
+  &:active {
+    box-shadow: 0 0 1rem 0 green;
+  }
+}
+
+.remove-feature {
+  cursor: pointer;
+
+  &:hover {
+    text-shadow: 0 0 10px red;
+  }
+  &:active {
+    text-shadow: 0 0 5px red;
+  }
+}
+
+.feature-estimate {
+  line-height: 2rem;
+}
+
 .unlock {
   cursor: pointer;
 
