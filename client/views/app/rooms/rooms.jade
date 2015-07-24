@@ -139,12 +139,15 @@ template(name="feature_editor")
                .col.s4.m4
                   each getFeatures 'todo'
                      +feature_column
+                  |&nbsp;
                .col.s4.m4
                   each getFeatures 'doing'
                      +feature_column
+                  |&nbsp;
                .col.s4.m4
                   each getFeatures 'done'
                      +feature_column
+                  |&nbsp;
 
       .modal-footer
          //hr
