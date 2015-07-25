@@ -1,7 +1,7 @@
 
 
 var createNewRoom = function (event) {
-    var newRoom = App.parseForm(event);
+    var newRoom = App.UI.parseForm(event);
     newRoom.color = Session.get("selectedRoomColor");
     newRoom.creator = Meteor.userId();
     newRoom.sessionInProgress = false;

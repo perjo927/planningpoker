@@ -65,7 +65,7 @@ template(name="timer")
             .center
                #timer-start.btn.red Start timer
 
-// TODO: if admin (Create features) + mark as done
+//
 template(name="feature_card")
    h5.center Ready for estimation
    .col.s12
@@ -87,6 +87,9 @@ template(name="feature_card")
                | {{getFeature.description}}
          .card-action
             a(href='{{getFeature.link}}' target="_blank") Go to Feature
+            if isCreator room.creator
+               b
+                  i#move-to-done.mdi-action-done.forward.right(title="{{getFeature._id}}")
 
 //
 template(name="estimation")
@@ -168,17 +171,18 @@ template(name="feature_form")
             input#link.validate(value='{{getEditingFeature.link}}', type='text' maxlength="30"
             pattern=".{5,30}" required title="(5 to 30 characters)" name="link")
             label.active(for='link') Feature link
-         .input-field.col.s6.m4
-            select#state.browser-default
-               option(value='todo', disabled='', selected='') State
-               option(value='todo') Todo
-               option(value='doing') Doing
-               option(value='done') Done
-         .input-field.col.s3.m2
-            select#change-estimate.browser-default(title="{{getEditingFeature._id}}")
-               option(value='{{getEditingFeature.estimate}}', disabled='', selected='') Set value
-               each getEstimate
-                  option(value='{{this}}')= this
+         unless newFeature
+            .input-field.col.s6.m2
+               select#state.browser-default
+                  option(value='todo', disabled='', selected='') State
+                  option(value='todo') Todo
+                  option(value='doing') Doing
+                  option(value='done') Done
+            .input-field.col.s3.m2
+               select#change-estimate.browser-default(title="{{getEditingFeature._id}}")
+                  option(value='{{getEditingFeature.estimate}}', disabled='', selected='') Estimate
+                  each getEstimate
+                     option(value='{{this}}')= this
          .input-field.col.s12.m8
             input#description.validate(value='{{getEditingFeature.description}}', type='text' maxlength="50"
             pattern=".{5,50}" required title="(5 to 50 characters)" name="description")
@@ -198,7 +202,6 @@ template(name="feature_column")
                   |          {{description}}
                a.secondary-content
                   i.mdi-action-highlight-remove.remove-feature.pink-text
-                  // TODO: Estimate
                   br
                   p.flow-text.feature-estimate
                      b {{estimate}}

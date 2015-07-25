@@ -1,3 +1,5 @@
+// TODO: Extract app.collection.remove
+
 var makeUserLeaveRoom = function () {
     var docViewer = Session.get("docViewer");
 
@@ -7,18 +9,36 @@ var makeUserLeaveRoom = function () {
         } else {
             //console.info("Removed",docViewer)
         }
-    })
+    });
+};
+
+var moveFeatureToState = function (id, state, features) {
+    App.Collection.update(features, {_id: id}, {$set: {state: state}});
+    // Pick the next doing, or todo (?)
+    var hasDoing = features.find({state: "doing"}).count() > 0;
+    if (hasDoing) {
+        return;
+    }
+    var todos = features.find({state: "todo"}).fetch();
+    if (todos.length > 0) {
+        var promoteId = todos[0]._id;
+        App.Collection.update(features, {_id: promoteId}, {$set: {state: "doing"}});
+    }
+
+};
+
+var removeFeature = function (id) {
+    Collections.presentation["features"].remove(id, function (error) {
+        if(!!error) {
+            //console.error(error);
+        } else {
+            //console.info("Removed",id)
+        }
+    });
 };
 
 var updateFeatureEstimate = function (newEstimate, featureId, features) {
-    features.update({_id: featureId}, {$set: {estimate: newEstimate}}, function (error, id) {
-        if (!!error) {
-            //console.error("Features update", error);
-        } else {
-            //console.info("Features update", id);
-        }
-    });
-
+    App.Collection.update(features, {_id: featureId}, {$set: {estimate: newEstimate}});
 };
 
 var upsertFeature = function (id, newFeature, template, state, estimate) {
@@ -192,8 +212,13 @@ Template.feature_card.helpers({
 Template.feature_card.events({
     "click #set-new-estimate": function (event, template) {
         if (template.data.room.creator === Meteor.userId()) {
-            Session.set("editingEstimate", "todo");
+            Session.set("editingEstimate", true);
         }
+    },
+    "click #move-to-done": function (event, template) {
+        var featureId = event.target.title;
+        var features = template.data.features;
+        moveFeatureToState(event.target.title, "done", features);
     },
     "change select": function (event, template) {
         var newEstimate = event.target.value;
@@ -219,7 +244,7 @@ Template.feature_editor.events({
     },
     "submit form": function (event, template) {
         event.preventDefault();
-        var newFeature = App.parseForm(event);
+        var newFeature = App.UI.parseForm(event);
         var id = Session.get("editingFeature");
         var state = Session.get("selectedFeatureState");
         var estimate = Session.get("selectedFeatureEstimate");
@@ -248,6 +273,9 @@ Template.feature_form.helpers({
     },
     "getEstimate": function () {
         return getEstimateUnit(this.room.estimates, this.estimates);
+    },
+    "newFeature": function () {
+        return Session.get("editingFeature") === "new";
     }
 });
 
@@ -261,6 +289,11 @@ Template.feature_form.events({
 /* */
 Template.feature_column.events({
     "click .edit-feature": function (event, template) {
+        Session.set("selectedFeatureState", this.state);
+        Session.set("selectedFeatureEstimate", this.estimate);
         Session.set("editingFeature", this._id);
+    },
+    "click .remove-feature": function (event, template) {
+        removeFeature(this._id);
     }
 });
