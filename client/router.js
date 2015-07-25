@@ -87,7 +87,7 @@ Router.route('/rooms/:_id', {
 
             // TODO: Fetch specific for all
             var estimates = Collections.presentation["estimates"].find();
-            var estimations = Collections.presentation["estimations"].find({"roomId": roomId});
+            // TODO: var estimations = Collections.presentation["estimations"].find({"roomId": roomId});
             var features = Collections.presentation["features"];
             var room = Collections.presentation["rooms"].findOne(roomId);
             var viewers = Collections.presentation["viewers"];
@@ -99,7 +99,7 @@ Router.route('/rooms/:_id', {
                 data: function () {
                     return {
                         "estimates": estimates,
-                        "estimations": estimations,
+                        // TODO: "estimations": estimations,
                         "features": features,
                         "room": room,
                         "viewers": viewers.find({"roomId": roomId})

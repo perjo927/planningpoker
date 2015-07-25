@@ -10,6 +10,17 @@ var makeUserLeaveRoom = function () {
     })
 };
 
+var updateFeatureEstimate = function (newEstimate, featureId, features) {
+    features.update({_id: featureId}, {$set: {estimate: newEstimate}}, function (error, id) {
+        if (!!error) {
+            //console.error("Features update", error);
+        } else {
+            //console.info("Features update", id);
+        }
+    });
+
+};
+
 var upsertFeature = function (id, newFeature, template, state) {
     newFeature.roomId = template.data.room._id;
     newFeature.state = state;
@@ -184,9 +195,11 @@ Template.feature_card.events({
         }
     },
     "change select": function (event, template) {
-        console.debug(event.target.value,template);
-        //updateFeatureEstimate(template.data.room._id, event.target.value);
-        //// TODO: Change feature estimate to value, get feature id from button click, or template data, or id
+        var newEstimate = event.target.value;
+        var featureId = event.target.title;
+        var features = template.data.features;
+        updateFeatureEstimate(newEstimate, featureId, features);
+
         Session.set("editingEstimate", false);
     }
 });

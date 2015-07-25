@@ -76,7 +76,7 @@ template(name="feature_card")
                if isCreator room.creator
                   .col.s3.right
                      // TODO: Can be its own template
-                     select#new-estimate.browser-default
+                     select#new-estimate.browser-default(title="{{getFeature._id}}")
                         option(value='', disabled='', selected='') Set value
                         each getEstimate
                            option(value='{{this}}')= this
