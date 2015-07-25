@@ -21,14 +21,16 @@ var updateFeatureEstimate = function (newEstimate, featureId, features) {
 
 };
 
-var upsertFeature = function (id, newFeature, template, state) {
+var upsertFeature = function (id, newFeature, template, state, estimate) {
     newFeature.roomId = template.data.room._id;
     newFeature.state = state;
+    newFeature.estimate = estimate;
 
     // If not previously estimated, insert, else update
     if (id === "new"){
         newFeature.estimate = "?";
-        // TODO: extract method
+        newFeature.state = "todo";
+
         template.data.features.insert(newFeature, function (error, _id) {
             if (!!error) {
                 //console.error("Features.insert error", error)
@@ -37,7 +39,6 @@ var upsertFeature = function (id, newFeature, template, state) {
             }
         });
     } else {
-        // TODO: extract method
         Object.keys(newFeature).forEach(function (key, index) {
             if (key !== 'roomId') {
                 var field = {};
@@ -204,6 +205,7 @@ Template.feature_card.events({
     }
 });
 
+
 /* */
 Template.feature_editor.events({
     "click #stop-editing": function () {
@@ -212,7 +214,7 @@ Template.feature_editor.events({
     "click .add-feature": function () {
         Session.set("editingFeature", "new");
     },
-    "change select": function (event, template) {
+    "change select#state": function (event, template) {
         Session.set("selectedFeatureState", event.target.value);
     },
     "submit form": function (event, template) {
@@ -220,7 +222,8 @@ Template.feature_editor.events({
         var newFeature = App.parseForm(event);
         var id = Session.get("editingFeature");
         var state = Session.get("selectedFeatureState");
-        upsertFeature(id, newFeature, template, state);
+        var estimate = Session.get("selectedFeatureEstimate");
+        upsertFeature(id, newFeature, template, state, estimate);
         Session.set("editingFeature", false);
     }
 });
@@ -242,12 +245,20 @@ Template.feature_form.helpers({
         var featureId = Session.get("editingFeature", featureId);
         var feature = this.features.findOne(featureId);
         return feature;
+    },
+    "getEstimate": function () {
+        return getEstimateUnit(this.room.estimates, this.estimates);
     }
 });
 
 
-/* */
+Template.feature_form.events({
+    "change select#change-estimate": function (event, template) {
+        Session.set("selectedFeatureEstimate", event.target.value);
+    }
+});
 
+/* */
 Template.feature_column.events({
     "click .edit-feature": function (event, template) {
         Session.set("editingFeature", this._id);

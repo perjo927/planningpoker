@@ -1,7 +1,7 @@
 // TODO: Break out templates into own files and own js in a folder - components
 // TODO: Leave room button, that will disconnect id from viewers collection
-// TODO: Bottom modal that shows a collection af all estimated and un-estimated features, right and left column
 
+//
 template(name="room")
    .container
       .row
@@ -75,7 +75,6 @@ template(name="feature_card")
             if editingEstimate
                if isCreator room.creator
                   .col.s3.right
-                     // TODO: Can be its own template
                      select#new-estimate.browser-default(title="{{getFeature._id}}")
                         option(value='', disabled='', selected='') Set value
                         each getEstimate
@@ -175,12 +174,17 @@ template(name="feature_form")
                option(value='todo') Todo
                option(value='doing') Doing
                option(value='done') Done
+         .input-field.col.s3.m2
+            select#change-estimate.browser-default(title="{{getEditingFeature._id}}")
+               option(value='{{getEditingFeature.estimate}}', disabled='', selected='') Set value
+               each getEstimate
+                  option(value='{{this}}')= this
          .input-field.col.s12.m8
             input#description.validate(value='{{getEditingFeature.description}}', type='text' maxlength="50"
             pattern=".{5,50}" required title="(5 to 50 characters)" name="description")
             label.active(for='description') Feature Description
       .row
-         button.modal-action.waves-effect.waves-green.btn.left(type='submit', name='action') CREATE
+         button.modal-action.waves-effect.waves-green.btn.left(type='submit', name='action') CREATE / UPDATE
 
 //
 template(name="feature_column")
