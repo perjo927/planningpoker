@@ -11,21 +11,21 @@ var renderDefault = function(router) {
 };
 
 var setRoomViewer = function (viewers, roomId, userId, email) {
-    var myRoomViewer = viewers.findOne({
-        "roomId": roomId,
-        "userId": userId
-    });
+    var myRoomViewer = viewers.findOne(userId);
 
     if (!!myRoomViewer) {
         Session.set("docViewer", myRoomViewer._id);
+        if (myRoomViewer.roomId !== roomId)
+        viewers.update(id, {$set: {roomId: roomId}})
     } else {
         viewers.insert({
-            "roomId": roomId,
-            "userId": userId,
-            "email": email
-        }, function (error, id) {
+                "_id": userId,
+                "roomId": roomId,
+                "email": email
+        },
+        function (error, id) {
             if (!!error) {
-                //console.error(error);
+                console.error(error);
             } else {
                 Session.set("docViewer", id)
             }
@@ -33,80 +33,79 @@ var setRoomViewer = function (viewers, roomId, userId, email) {
     }
 };
 
-// TODO: dashboard, account settings, admin
+// TODO: Auth redirect / Router.go
+// TODO: profile settings
 /* */
 Router.route('/', {
-        name: "home",
-        loadingTemplate: "loading",
-        layoutTemplate: "app",
-        waitOn: function() {
-            return CreateSubscriptions([
-                "rooms"
-            ]);
-        },
-        action: function(){
-            var router = this;
-            var collection = Collections.presentation["rooms"];
-            var rooms = collection.find();
+    name: "home",
+    loadingTemplate: "loading",
+    layoutTemplate: "app",
+    waitOn: function() {
+        return CreateSubscriptions({
+            "rooms": false
+        });
+    },
+    action: function(){
+        var router = this;
+        var rooms = Collections.presentation["rooms"].find();
 
-            router.render('home', {
-                data: function () {
-                    return {
-                        rooms: collection.find()
-                    }
+        router.render('home', {
+            data: function () {
+                return {
+                    rooms: rooms
                 }
-            });
-            renderDefault(router);
-        }
+            }
+        });
+        renderDefault(router);
     }
-);
-// TODO: If not meteor user - redirect / router.go to home
-
+});
 
 
 Router.route('/rooms/:_id', {
-        name: "room",
-        loadingTemplate: "loading",
-        layoutTemplate: "app",
-        waitOn: function() {
-            return CreateSubscriptions([
-                "estimates", // TODO: specific room subscriptions
-                "estimations", // TODO: specific room subscriptions
-                "rooms", // TODO: specific room subscriptions, {_id: roomId}
-                "features", // TODO: subscribe only to relevant features
-                "viewers" // TODO: subscribe only to relevant viewers
-            ]);
-        },
-        action: function(){
-            var router = this;
-            var params = router.params;
-            var roomId = params._id;
-            var user = Meteor.user();
-            var email = user.emails[0].address,
-                userId = user._id;
+    name: "room",
+    loadingTemplate: "loading",
+    layoutTemplate: "app",
+    waitOn: function() {
+        var router = this;
+        var params = router.params;
+        var roomId = params._id;
 
-            // TODO: Fetch specific for all
-            var estimates = Collections.presentation["estimates"].find();
-            // TODO: var estimations = Collections.presentation["estimations"].find({"roomId": roomId});
-            var features = Collections.presentation["features"];
-            var room = Collections.presentation["rooms"].findOne(roomId);
-            var viewers = Collections.presentation["viewers"];
+        var subscriptions = {
+            "roomId": roomId,
+            "estimates": false,
+            "estimationsPerRoom": roomId,
+            "featuresPerRoom": roomId,
+            "viewersPerRoom": roomId
+        };
+        return CreateSubscriptions(subscriptions);
+    },
+    action: function(){
+        var router = this;
+        var params = router.params;
+        var roomId = params._id;
+        var user = Meteor.user();
+        var email = user.emails[0].address,
+            userId = user._id;
 
-            setRoomViewer(viewers, roomId, userId, email);
-            renderDefault(router);
+        var estimates = Collections.presentation["estimates"].find();
+        var estimations = Collections.presentation["estimations"];//.find();
+        var features = Collections.presentation["features"];//.find();
+        var room = Collections.presentation["rooms"].findOne(roomId);
+        var viewers = Collections.presentation["viewers"];//.find();
 
-            router.render('room', {
-                data: function () {
-                    return {
-                        "estimates": estimates,
-                        // TODO: "estimations": estimations,
-                        "features": features,
-                        "room": room,
-                        "viewers": viewers.find({"roomId": roomId})
-                    }
+        setRoomViewer(viewers, roomId, userId, email);
+        renderDefault(router);
+        router.render('room', {
+            data: function () {
+                return {
+                    "estimates": estimates,
+                    "estimations": estimations,
+                    "features": features,
+                    "viewers": viewers.find({"roomId": roomId}),
+                    "room": room
                 }
-            });
+            }
+        });
 
-        }
     }
-);
+});

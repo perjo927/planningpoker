@@ -1,9 +1,15 @@
 // Most subscriptions will be used in Iron Router
 
-CreateSubscriptions = function(subsArray) {
+CreateSubscriptions = function(subscriptionsObject) {
     var subscriptions = [];
-    subsArray.forEach(function(collection) {
-        subscriptions.push(Meteor.subscribe(collection));
+
+    Object.keys(subscriptionsObject).forEach(function(collection) {
+        var parameters = subscriptionsObject[collection];
+        if (parameters === false) {
+            subscriptions.push(Meteor.subscribe(collection));
+        } else {
+            subscriptions.push(Meteor.subscribe(collection, parameters));
+        }
     });
     return subscriptions;
 };
