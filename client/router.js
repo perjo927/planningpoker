@@ -21,11 +21,12 @@ var setRoomViewer = function (viewers, roomId, userId, email) {
         viewers.insert({
                 "_id": userId,
                 "roomId": roomId,
-                "email": email
+                "email": email,
+                "creator": userId
         },
         function (error, id) {
             if (!!error) {
-                console.error(error);
+                //console.error(error);
             } else {
                 Session.set("docViewer", id)
             }

@@ -1,0 +1,13 @@
+#delete-room {
+  cursor: pointer;
+}
+
+#remove-room {
+  cursor: pointer;
+  &:hover {
+    text-shadow: 0 0 5px #e2e2e2;
+  }
+  &:active {
+    text-shadow: 0 0 1px #e2e2e2;
+  }
+}

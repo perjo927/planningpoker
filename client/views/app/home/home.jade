@@ -27,6 +27,8 @@ template(name="room_card")
       .card(class="{{color}}")
          .card-content.white-text
             span.card-title= roomname
+            if isCreator creator
+               i#remove-room.mdi-action-highlight-remove.right
             p= description
          .card-action
             a(href='/rooms/{{_id}}') Go to room

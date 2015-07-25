@@ -45,6 +45,7 @@ var upsertFeature = function (id, newFeature, template, state, estimate) {
     newFeature.roomId = template.data.room._id;
     newFeature.state = state;
     newFeature.estimate = estimate;
+    newFeature.creator = Meteor.userId();
 
     // If not previously estimated, insert, else update
     if (id === "new"){
@@ -118,8 +119,8 @@ var getEstimateUnit = function (roomEstimateUnit, estimatesCollection) {
     return estimatesList;
 };
 
-var isCreator = function (roomCreatorId) {
-    return Meteor.userId() === roomCreatorId;
+var isCreator = function (roomCreator) {
+    return Meteor.userId() === roomCreator;
 };
 
 var flipSessionInProgress = function (roomId, newValue) {
@@ -157,7 +158,7 @@ Template.room_header.helpers({
 });
 
 
-// TODO: use common methods
+//
 Template.room_header.events({
     "click #lock": function (event, template) {
         flipSessionInProgress(template.data.room._id, true);

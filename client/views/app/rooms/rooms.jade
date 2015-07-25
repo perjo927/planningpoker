@@ -35,7 +35,6 @@ template(name="room")
 template(name="room_header")
    .flow-text.center
       b Realm's planning room
-      // TODO: make work
       if isCreator room.creator
          span.pink-text (Admin)
          if room.sessionInProgress
