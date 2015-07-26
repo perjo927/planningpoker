@@ -46,6 +46,11 @@ var calculateAverage = function (estimations) {
     return 0;
 };
 
+var getEstimation = function (userId) {
+    var estimation = Collections.presentation["estimations"].findOne(userId);
+    return estimation;
+};
+
 var insertEstimation = function (estimations, estimation, roomId, userId) {
     var callback = function () {
         Session.set("averageReady", true);
@@ -104,7 +109,7 @@ var updateFeatureEstimate = function (newEstimate, featureId, features) {
 
 // TODO: Refactor ?
 var upsertFeature = function (id, newFeature, template, state, estimate) {
-    // TODO: Object initializetion
+    // TODO: Object initialization
     newFeature.roomId = template.data.room._id;
     newFeature.state = state;
     newFeature.estimate = estimate;
@@ -451,6 +456,7 @@ Template.participants.helpers({
         return Session.get("averageReady");
     },
     "estimation": function () {
-        console.debug(this);
+        var estimation = getEstimation(this._id);
+        return estimation;
     }
 });
