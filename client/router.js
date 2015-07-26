@@ -24,6 +24,8 @@ var setRoomViewer = function (viewers, roomId, userId, email) {
             "roomId": roomId,
             "email": email,
             "creator": userId
+        }, function () {
+            Session.set("docViewer", userId);
         });
     }
 };
@@ -83,10 +85,10 @@ Router.route('/rooms/:_id', {
             userId = user._id;
 
         var estimates = Collections.presentation["estimates"].find();
-        var estimations = Collections.presentation["estimations"];//.find();
-        var features = Collections.presentation["features"];//.find();
+        var estimations = Collections.presentation["estimations"];
+        var features = Collections.presentation["features"];
         var room = Collections.presentation["rooms"].findOne(roomId);
-        var viewers = Collections.presentation["viewers"];//.find();
+        var viewers = Collections.presentation["viewers"];
 
         setRoomViewer(viewers, roomId, userId, email);
         renderDefault(router);

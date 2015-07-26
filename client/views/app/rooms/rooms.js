@@ -1,19 +1,16 @@
 // TODO: Extract app.collection.remove, etc.
 
 var startTimer = function () {
-    // TODO: reset all estimations .forEach för roomId - kan fucka upp nästa omgångs beräkningar annars
-    // om estimations finns
+    resetAverage(Collections.presentation["estimations"]);
 
     App.UI.countdown.callback = function() {
         Session.set("countingDown", false);
-        Session.set("averageReady", true);
 
         var estimation = Session.get("chosenEstimation");
         var estimations = Collections.presentation["estimations"];
         var room = Collections.presentation["rooms"].findOne();
 
         insertEstimation(estimations, estimation, room._id, Meteor.userId());
-        // calculateAverage() + broadcast average för rum
         // flipCards + unFlipCards
         // TODO:  flip cards, calculate averge
     };
@@ -21,23 +18,54 @@ var startTimer = function () {
     App.UI.countdown.counter = Meteor.setInterval(App.UI.countdown.timer, App.UI.countdown.interval);
 };
 
+var resetAverage = function (estimations) {
+    estimations.find().forEach(function (element,index,array) {
+        var value = element.estimation;
+        if (value !== "?") {
+            App.Collection.update(estimations, element._id, {$set: {value: "?"}})
+        }
+    });
+};
+
+var calculateAverage = function (estimations) {
+    var total = 0, count = 0, average = 0;
+
+    estimations.find().forEach(function (element,index,array) {
+        var value = element.estimation;
+        if (value !== "?") {
+            total += parseInt(value, 10);
+            count++;
+        }
+    });
+
+    if (total !== 0 && count !== 0) {
+        average = total / count;
+        return average;
+    }
+
+    console.debug("total, count, average", total, count, average);
+    return 0;
+};
+
 var insertEstimation = function (estimations, estimation, roomId, userId) {
+    var callback = function () {
+        Session.set("averageReady", true);
+    };
+
     var myEstimation = App.Collection.findOne(estimations, userId);
 
     if (!!myEstimation) {
-        //Session.set("docViewer", myEstimation._id);
-
         if (myEstimation.roomId !== roomId) {
             App.Collection.update(estimations, userId, {$set: {roomId: roomId}})
         }
-        App.Collection.update(estimations, userId, {$set: {estimation: estimation}})
+        App.Collection.update(estimations, userId, {$set: {estimation: estimation}}, callback)
     } else {
         App.Collection.insert(estimations, {
             "_id": userId,
             "roomId": roomId,
             "estimation": estimation,
             "creator": userId
-        });
+        }, callback);
     }
 };
 
@@ -242,6 +270,9 @@ Template.timer.helpers({
     },
     "isAverageReady": function () {
         return Session.get("averageReady");
+    },
+    "average": function () {
+        return calculateAverage(this.estimations);
     }
 });
 

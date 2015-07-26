@@ -36,23 +36,43 @@ App.UI.countdown.timer = function() {
 };
 
 /* */
-App.Collection.remove = function (collection,_id) {
-    collection.remove(_id, function (error) {
-        if(!!error) {
+
+App.Collection.insert = function (collection, document, callback) {
+    collection.insert(document, function (error, id) {
+        if (!!error) {
             //console.error(error);
         } else {
-            //console.info("Removed",docViewer)
+            //console.info(id);
+            if (!!callback) {
+                callback();
+            }
         }
     });
 };
 
 //
-App.Collection.update = function (collection, id, modifier) {
+App.Collection.update = function (collection, id, modifier, callback) {
     collection.update(id, modifier, function (error, id) {
         if (!!error) {
             //console.error("Features update", error);
         } else {
             //console.info("Features update", id);
+            if (!!callback) {
+                callback();
+            }
+        }
+    });
+};
+
+App.Collection.remove = function (collection,_id, callback) {
+    collection.remove(_id, function (error) {
+        if(!!error) {
+            //console.error(error);
+        } else {
+            //console.info("Removed",docViewer)
+            if (!!callback) {
+                callback();
+            }
         }
     });
 };
@@ -71,13 +91,3 @@ App.Collection.find = function (collection, query) {
     return collection.find(query);
 };
 
-//
-App.Collection.insert = function (collection, document) {
-    collection.insert(document, function (error, id) {
-        if (!!error) {
-            //console.error(error);
-        } else {
-            Session.set("docViewer", id)
-        }
-    });
-};
