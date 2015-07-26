@@ -6,7 +6,6 @@ var renderDefault = function(router) {
     });
     router.render('footer', {
         to: "footer"
-        //}
     });
 };
 
@@ -31,7 +30,6 @@ var setRoomViewer = function (viewers, roomId, userId, email) {
 };
 
 // TODO: Auth redirect / iron auth / Router.go
-// TODO: profile settings
 /* */
 Router.route('/', {
     name: "home",
@@ -104,5 +102,25 @@ Router.route('/rooms/:_id', {
             }
         });
 
+    }
+});
+
+// TODO: profile settings
+/* */
+Router.route('/profile', {
+    name: "profile",
+    loadingTemplate: "loading",
+    layoutTemplate: "app",
+    action: function(){
+        var router = this;
+
+        router.render('profile', {
+            data: function () {
+                return {
+                    user: Meteor.user()
+                }
+            }
+        });
+        renderDefault(router);
     }
 });

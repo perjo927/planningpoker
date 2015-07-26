@@ -33,6 +33,18 @@ var creatorAccess = function (fetch, insertRestriction, updateRestriction, remov
     };
 };
 
+/* */
+//Meteor.users.allow({
+//    insert: function (user, doc) {
+//        return true;
+//    },
+//    update: function(user, doc, fields, modifier) {
+//        return true;
+//    },
+//    remove: function(user, doc) {
+//        return false;
+//    }
+//});
 
 /* */
 Collections.presentation["estimates"].allow(access(false, false, false));

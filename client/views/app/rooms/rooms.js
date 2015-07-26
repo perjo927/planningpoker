@@ -445,7 +445,7 @@ Template.feature_column.events({
         Session.set("selectedFeatureEstimate", this.estimate);
         Session.set("editingFeature", this._id);
     },
-    "click .remove-feature": function (event, template) {
+    "click .remove-feature": function () {
         removeFeature(this._id);
     }
 });
@@ -458,5 +458,8 @@ Template.participants.helpers({
     "estimation": function () {
         var estimation = getEstimation(this._id);
         return estimation;
+    },
+    "getUser": function () {
+        return Meteor.users.findOne(this._id);
     }
 });

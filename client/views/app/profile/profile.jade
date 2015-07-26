@@ -1,3 +1,99 @@
-//
-   Created by preybird on 2015-07-25.
+// TODO: split into templates
+template(name="profile")
+   .container
+      h2.center Profile settings
+      hr
 
+      .row
+         h4 Email
+         if editingEmail
+            form.col.s12
+               .row
+                  .input-field.col.s6
+                     input#email.validate(placeholder="Email" type="email" pattern=".{5,30}"
+                     maxlength="30" required title="(5 to 30 characters)" name="email")
+                     label.active(for="email") Email
+                  .col.s6
+                     button.modal-action.waves-effect.waves-green.btn.left(type='submit', name='action') CREATE / UPDATE
+                     a.waves-effect.waves-light.btn.cancel Cancel
+         else
+            each user.emails
+               h5
+                  .grey-text= this.address
+
+      .row
+         h4 Name
+            i#names.mdi-editor-mode-edit.left.edit-profile.green-text
+         if editingName
+            form.col.s12
+               .row
+                  .input-field.col.s6
+                     input#username.validate(placeholder="{{user.profile.name}}" type="text" pattern=".{5,0}"
+                     maxlength="30" required title="(5 to 30 characters)" name="username")
+                     label.active(for="username") Name
+                  .col.s6
+                     button.modal-action.waves-effect.waves-green.btn.left(type='submit', name='action') CREATE / UPDATE
+                     a.waves-effect.waves-light.btn.cancel Cancel
+
+         else
+            unless user.profile.name
+               h5
+                  .red-text Create a username
+            else
+               h5
+                  .green-text= user.profile.name
+
+      .row
+         h4 Tagline
+            i#taglines.mdi-editor-mode-edit.left.edit-profile.green-text
+         if editingTagline
+            form.col.s12
+               .row
+                  .input-field.col.s6
+                     input#tagline.validate(placeholder="{{user.profile.tagline}}" type="text" pattern=".{5,20}"
+                     maxlength="20" required title="(5 to 20 characters)" name="tagline")
+                     label.active(for="tagline") Tagline
+                  .col.s6
+                     button.modal-action.waves-effect.waves-green.btn.left(type='submit', name='action') CREATE / UPDATE
+                     a.waves-effect.waves-light.btn.cancel Cancel
+         else
+            unless user.profile.tagline
+               h5
+                  .red-text Create a tagline
+            else
+               h5
+                  .green-text= user.profile.tagline
+      .row
+         h4 Avatar
+            i#avatars.mdi-editor-mode-edit.left.edit-profile.green-text
+         if editingAvatar
+            .col.s6
+               select#avatar-new.browser-default
+                  option(value='', disabled='', selected='') Select avatar
+                  option(value='bat') Bat
+                  option(value='bear') Bear
+                  option(value='bird') Bird
+                  option(value='camel') Camel
+                  option(value='crocodile') Croc
+                  option(value='dinosaur') Dino
+                  option(value='dog') Dog
+                  option(value='dolphin') Dolphin
+                  option(value='fish') Fish
+                  option(value='fox') Fox
+                  option(value='frog') Frog
+                  option(value='gorilla') Gorilla
+                  option(value='horse') Horse
+                  option(value='kangoroo') Kangaroo
+                  option(value='leopard') Leopard
+                  option(value='lion') Lion
+                  option(value='mouse') Mouse
+                  option(value='panda') Panda
+                  option(value='sheep') Sheep
+                  option(value='squirrel') Squirrel
+                  option(value='snake') Snake
+                  option(value='turtle') Turtle
+                  option(value='wolf') Wolf
+         unless user.profile.avatar
+            img.circle.responsive-img.profile.center(src="img/anon.svg")
+         else
+            img.circle.responsive-img.profile.center(src="{{user.profile.avatar}}")

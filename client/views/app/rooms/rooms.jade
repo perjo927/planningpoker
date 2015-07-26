@@ -210,22 +210,28 @@ template(name="feature_column")
                   p.flow-text.feature-estimate
                      b {{estimate}}
 
-//TODO: Average estimate (when estimated)
-
-
-// TODO: Populate with more user data
-// TODO : Get estimations for cards, flip and unflip
+//
 template(name="participants")
    ul.collection
       each viewers
          .col.s12.m6
             li.collection-item.dismissable.avatar
-               img.circle(src='img/anon.svg', alt='')
-               span.title= email
+               if getUser.profile.avatar
+                  img.circle(src='{{getUser.profile.avatar}}', alt='')
+               else
+                  img.circle(src='img/anon.svg', alt='')
+               if getUser.profile.name
+                  span.title= getUser.profile.name
+               else
+                  span.title= email
+
                p
-                  // TODO: Fetch from profile
-                  | Mobile Web Realm
-               // un-flipped shows the back. TODO: toggle
+                  if getUser.profile.tagline
+                     | {{getUser.profile.tagline}}
+                  else
+                     // TODO
+                     | &nbsp;
+
                unless isAverageReady
                   .poker-card.un-flipped.secondary-content.right
                      br

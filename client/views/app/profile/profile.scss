@@ -1,0 +1,13 @@
+
+.edit-profile {
+  cursor: pointer;
+
+  &:hover {
+    text-shadow: 0 0 20px green;
+    font-weight: bold;
+  }
+  &:active {
+    text-shadow: 0 0 10px green;
+    font-weight: bold;
+  }
+}
