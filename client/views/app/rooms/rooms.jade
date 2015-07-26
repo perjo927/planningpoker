@@ -49,18 +49,22 @@ template(name="room_header")
 //
 template(name="timer")
    if isCountingDown
-      unless averageReady
-         h4.center.time
-            | Time left:
-            span.red-text(style="text-shadow: 0 0 {{shadowValue}}px #ff0000")= seconds
-      else
-         h4.center.time
-            | Average: 3 {{average}}
+      h4.center.time
+         | Time left:
+         span.red-text(style="text-shadow: 0 0 {{shadowValue}}px #ff0000")= seconds
    else
       if isCreator room.creator
          if room.sessionInProgress
-            .center
-               #timer-start.btn.red Start timer
+            unless isAverageReady
+                  .center
+                     #timer-start.btn.red Start timer
+      if isAverageReady
+         h4.center.time
+            | Average:
+            span.red-text  3 {{average}}
+            if isCreator room.creator
+               span#timer-reset.mdi-device-access-alarm.reset-clock
+
 
 //
 template(name="feature_card")

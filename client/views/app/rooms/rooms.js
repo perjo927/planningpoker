@@ -139,12 +139,23 @@ var updateRoomEstimate = function (roomId, newValue) {
     });
 };
 
+/* **** */
+
 //
 Template.room.onRendered(function () {
     this.$('.modal-trigger').leanModal();
+
+    Streamy.on('startTime', function(d, s) {
+        Session.set("countingDown", true);
+        startTimer();
+    });
+    Streamy.on('resetTime', function(d, s) {
+        Session.set("averageReady", false);
+        // TODO: reset estimates, disable button
+    });
 });
 
-// TODO: same action as when leaving manually
+//
 Template.room.onDestroyed(function () {
     makeUserLeaveRoom();
 });
@@ -191,16 +202,17 @@ Template.timer.helpers({
         var shadowValue = diff*15;
         return shadowValue;
     },
-    "averageReady": function () {
+    "isAverageReady": function () {
         return Session.get("averageReady");
     }
 });
 
 Template.timer.events({
     "click #timer-start": function () {
-        Session.set("countingDown", true);
-        startTimer();
-        Session.set("averageReady", false);// TODO: fix
+        Streamy.broadcast('startTime', { data: '' });
+    },
+    "click #timer-reset": function () {
+        Streamy.broadcast('resetTime', { data: '' });
     }
 });
 
@@ -307,7 +319,7 @@ Template.feature_form.helpers({
         return getEstimateUnit(this.room.estimates, this.estimates);
     },
     "newFeature": function () {
-        return Session.get("editingFeature") === "new";
+        return Session.equals("editingFeature", "new");
     }
 });
 
