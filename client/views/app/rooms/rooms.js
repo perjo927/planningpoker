@@ -220,6 +220,9 @@ Template.timer.events({
 Template.estimation.helpers({
     "getEstimate": function () {
         return getEstimateUnit(this.room.estimates, this.estimates);
+    },
+    "disabled": function () {
+        return ( Session.equals("countingDown", true) ) ? "" : "disabled";
     }
 });
 
@@ -227,6 +230,9 @@ Template.estimation.helpers({
 Template.estimation_admin.helpers({
     "getEstimate": function () {
         return getEstimateUnit(this.room.estimates, this.estimates);
+    },
+    "disabled": function () {
+        return (Session.equals("countingDown", true)) ? "" : "disabled";
     }
 });
 

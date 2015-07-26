@@ -97,7 +97,7 @@ template(name="estimation")
    h5.center Your estimate
    h5.center
       each getEstimate
-         a.estimate= this
+         a.estimate(class="{{disabled}}")= this
 //
 template(name="estimation_admin")
    .col.s12.m4
@@ -110,7 +110,7 @@ template(name="estimation_admin")
    .col.s12
       h5.center
          each getEstimate
-            a.estimate= this
+            a.estimate(class="{{disabled}}")= this
 
 //
 template(name="feature_editor")
