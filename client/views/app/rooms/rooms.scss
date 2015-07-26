@@ -115,12 +115,9 @@
   border-radius: 10%;
   background-color: #fff;
   transition: box-shadow .25s;
-  transition: background-color 2s;
   box-shadow: 0 2px 5px 0 rgba(0, 0, 0, 0.16), 0 2px 10px 0 rgba(0, 0, 0, 0.12);
 
   &.un-flipped {
-    transition: background-color 2s;
-
     background-color: #636363;
     color: #fff;
   }
