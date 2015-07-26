@@ -198,7 +198,8 @@ template(name="feature_column")
       ul.collection
          li.collection-item.avatar
                i.mdi-editor-mode-edit.circle.edit-feature.teal
-               span.title {{title}}
+               span.title
+                  a(href="{{link}}" target="_blank")= title
                p
                   | {{brand}}
                   br
@@ -222,8 +223,14 @@ template(name="participants")
                img.circle(src='img/anon.svg', alt='')
                span.title= email
                p
+                  // TODO: Fetch from profile
                   | Mobile Web Realm
                // un-flipped shows the back. TODO: toggle
-               .poker-card.un-flipped.secondary-content.right
-                  br
-                  b ?
+               unless isAverageReady
+                  .poker-card.un-flipped.secondary-content.right
+                     br
+                     b ?
+               else
+                  .poker-card.secondary-content.right
+                     br
+                     b {{estimation}}

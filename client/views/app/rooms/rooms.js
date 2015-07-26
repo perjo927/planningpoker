@@ -43,7 +43,6 @@ var calculateAverage = function (estimations) {
         return average;
     }
 
-    console.debug("total, count, average", total, count, average);
     return 0;
 };
 
@@ -443,5 +442,15 @@ Template.feature_column.events({
     },
     "click .remove-feature": function (event, template) {
         removeFeature(this._id);
+    }
+});
+
+/* */
+Template.participants.helpers({
+    "isAverageReady": function () {
+        return Session.get("averageReady");
+    },
+    "estimation": function () {
+        console.debug(this);
     }
 });
