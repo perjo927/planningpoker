@@ -29,16 +29,21 @@ App.UI.countdown.timer = function() {
     if (App.UI.countdown.count <= 0)
     {
         Meteor.clearInterval(App.UI.countdown.counter);
-        Session.set("countingDown", false);
-        Session.set("averageReady", true);
         App.UI.countdown.count = 6000;
+        App.UI.countdown.callback();
         return;
     }
 };
 
 /* */
-App.Collection.remove = function (_id) {
-
+App.Collection.remove = function (collection,_id) {
+    collection.remove(_id, function (error) {
+        if(!!error) {
+            //console.error(error);
+        } else {
+            //console.info("Removed",docViewer)
+        }
+    });
 };
 
 //
@@ -53,8 +58,12 @@ App.Collection.update = function (collection, id, modifier) {
 };
 
 App.Collection.findOne = function (collection, query) {
-
+    if (!query) {
+        return collection.findOne();
+    }
+    return collection.findOne(query);
 };
+
 App.Collection.find = function (collection, query) {
     if (!query) {
         return collection.find();
@@ -64,5 +73,11 @@ App.Collection.find = function (collection, query) {
 
 //
 App.Collection.insert = function (collection, document) {
-
+    collection.insert(document, function (error, id) {
+        if (!!error) {
+            //console.error(error);
+        } else {
+            Session.set("docViewer", id)
+        }
+    });
 };

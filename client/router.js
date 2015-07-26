@@ -11,25 +11,19 @@ var renderDefault = function(router) {
 };
 
 var setRoomViewer = function (viewers, roomId, userId, email) {
-    var myRoomViewer = viewers.findOne(userId);
+    var myRoomViewer = App.Collection.findOne(viewers, userId);
 
     if (!!myRoomViewer) {
         Session.set("docViewer", myRoomViewer._id);
-        if (myRoomViewer.roomId !== roomId)
-        viewers.update(id, {$set: {roomId: roomId}})
+        if (myRoomViewer.roomId !== roomId) {
+            App.Collection.update(viewers, userId, {$set: {roomId: roomId}})
+        }
     } else {
-        viewers.insert({
-                "_id": userId,
-                "roomId": roomId,
-                "email": email,
-                "creator": userId
-        },
-        function (error, id) {
-            if (!!error) {
-                //console.error(error);
-            } else {
-                Session.set("docViewer", id)
-            }
+        App.Collection.insert(viewers, {
+            "_id": userId,
+            "roomId": roomId,
+            "email": email,
+            "creator": userId
         });
     }
 };

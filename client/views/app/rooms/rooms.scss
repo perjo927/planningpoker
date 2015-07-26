@@ -1,3 +1,4 @@
+// TODO: Sassify
 
 .forward, .reset-clock {
   cursor: pointer;
@@ -9,7 +10,7 @@
   }
 }
 
-/*  TODO: extract what's similar to common functionality */
+//  TODO: extract what's similar to common functionality
 .add-feature {
   cursor: pointer;
 
@@ -85,6 +86,12 @@
     background-color: #ededed;
     color: grey;
     box-shadow: none;
+
+    &:active, &.hover {
+      background-color: #ededed;
+      color: grey;
+      box-shadow: none;
+    }
   }
 
   &:hover {
@@ -92,8 +99,10 @@
     font-weight: bold;
   }
   &:active {
+    color: #b4ba24;
     text-shadow: 0 2px 13px grey;
     box-shadow: 0 2px 5px 0 rgba(0, 0, 0, 0.20);
+    background-color: rgba(22, 55, 95, 0.97);
   }
 }
 

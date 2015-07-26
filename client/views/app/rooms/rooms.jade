@@ -32,7 +32,7 @@ template(name="room")
 //
 template(name="room_header")
    .flow-text.center
-      b Realm's planning room
+      b= room.roomname
       if isCreator room.creator
          span.pink-text (Admin)
          if room.sessionInProgress
@@ -95,14 +95,21 @@ template(name="feature_card")
 //
 template(name="estimation")
    h5.center Your estimate
+      if isCountingDown
+         span :
+         span.red-text &nbsp; {{myEstimate}}
    h5.center
       each getEstimate
-         a.estimate(class="{{disabled}}")= this
+         a.estimate(class="{{disabled}}" title="{{this}}")= this
 //
 template(name="estimation_admin")
    .col.s12.m4
       h5.center Your estimate
-    .col.s8.m4.offset-s2.offset-m4
+         if isCountingDown
+            span :
+            span.red-text &nbsp; {{myEstimate}}
+
+   .col.s8.m4.offset-s2.offset-m4
       select#estimates.browser-default
          option(value='', disabled='', selected='') Select estimation unit
          each estimates
@@ -110,7 +117,7 @@ template(name="estimation_admin")
    .col.s12
       h5.center
          each getEstimate
-            a.estimate(class="{{disabled}}")= this
+            a.estimate(class="{{disabled}}" title="{{this}}")= this
 
 //
 template(name="feature_editor")

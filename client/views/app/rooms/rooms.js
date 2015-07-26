@@ -1,19 +1,46 @@
 // TODO: Extract app.collection.remove, etc.
 
 var startTimer = function () {
+    App.UI.countdown.callback = function() {
+        Session.set("countingDown", false);
+        Session.set("averageReady", true);
+
+        var estimation = Session.get("chosenEstimation");
+        var estimations = Collections.presentation["estimations"];
+        var room = Collections.presentation["rooms"].findOne();
+
+        insertEstimation(estimations, estimation, room._id, Meteor.userId());
+        // calculateAverage() + broadcast
+        // flipCards + unFlipCards
+        // TODO: insert into estimations, flip cards, calculate averge
+    };
+    // TODO: reset all averages .forEach för roomId
     App.UI.countdown.counter = Meteor.setInterval(App.UI.countdown.timer, App.UI.countdown.interval);
+};
+
+var insertEstimation = function (estimations, estimation, roomId, userId) {
+    var myEstimation = App.Collection.findOne(estimations, userId);
+
+    if (!!myEstimation) {
+        //Session.set("docViewer", myEstimation._id);
+
+        if (myEstimation.roomId !== roomId) {
+            App.Collection.update(estimations, userId, {$set: {roomId: roomId}})
+        }
+        App.Collection.update(estimations, userId, {$set: {estimation: estimation}})
+    } else {
+        App.Collection.insert(estimations, {
+            "_id": userId,
+            "roomId": roomId,
+            "estimation": estimation,
+            "creator": userId
+        });
+    }
 };
 
 var makeUserLeaveRoom = function () {
     var docViewer = Session.get("docViewer");
-
-    Collections.presentation["viewers"].remove(docViewer, function (error) {
-        if(!!error) {
-            //console.error(error);
-        } else {
-            //console.info("Removed",docViewer)
-        }
-    });
+    App.Collection.remove(Collections.presentation["viewers"], docViewer);
 };
 
 var moveFeatureToState = function (id, state, features) {
@@ -45,7 +72,9 @@ var updateFeatureEstimate = function (newEstimate, featureId, features) {
     App.Collection.update(features, {_id: featureId}, {$set: {estimate: newEstimate}});
 };
 
+// TODO: Refactor ?
 var upsertFeature = function (id, newFeature, template, state, estimate) {
+    // TODO: Object initializetion
     newFeature.roomId = template.data.room._id;
     newFeature.state = state;
     newFeature.estimate = estimate;
@@ -56,6 +85,7 @@ var upsertFeature = function (id, newFeature, template, state, estimate) {
         newFeature.estimate = "?";
         newFeature.state = "todo";
 
+        // TODO: app.collection
         template.data.features.insert(newFeature, function (error, _id) {
             if (!!error) {
                 //console.error("Features.insert error", error)
@@ -69,6 +99,7 @@ var upsertFeature = function (id, newFeature, template, state, estimate) {
                 var field = {};
                 field[key] = newFeature[key];
 
+                // TODO: app.collection
                 template.data.features.update(id, {$set: field }, function (error, _id) {
                     if(!!error) {
                         //console.error("Features.update error", error)
@@ -106,8 +137,6 @@ var getFeature = function (state, context) {
     // fetch top priority (0)
     return featuresList[0];
 };
-
-
 
 
 var getEstimateUnit = function (roomEstimateUnit, estimatesCollection) {
@@ -151,7 +180,7 @@ Template.room.onRendered(function () {
     });
     Streamy.on('resetTime', function(d, s) {
         Session.set("averageReady", false);
-        // TODO: reset estimates, disable button
+        Session.set("chosenEstimation", "?");
     });
 });
 
@@ -217,12 +246,29 @@ Template.timer.events({
 });
 
 /* */
+// TODO: Extract common methods for estimation and admin, "inheritance"
+
 Template.estimation.helpers({
     "getEstimate": function () {
         return getEstimateUnit(this.room.estimates, this.estimates);
     },
     "disabled": function () {
         return ( Session.equals("countingDown", true) ) ? "" : "disabled";
+    },
+    "myEstimate": function () {
+        return Session.get("chosenEstimation");
+    },
+    "isCountingDown": function () {
+        return Session.get("countingDown");
+    }
+});
+
+Template.estimation.events({
+    "click .estimate": function (event) {
+        if (Session.equals("countingDown", true)) {
+            var estimation = event.target.title;
+            Session.set("chosenEstimation", estimation);
+        }
     }
 });
 
@@ -233,12 +279,24 @@ Template.estimation_admin.helpers({
     },
     "disabled": function () {
         return (Session.equals("countingDown", true)) ? "" : "disabled";
+    },
+    "isCountingDown": function () {
+        return Session.get("countingDown");
+    },
+    "myEstimate": function () {
+        return Session.get("chosenEstimation");
     }
 });
 
 Template.estimation_admin.events({
     "change select": function (event, template) {
         updateRoomEstimate(template.data.room._id, event.target.value);
+    },
+    "click .estimate": function (event) {
+        if (Session.equals("countingDown", true)) {
+            var estimation = event.target.title;
+            Session.set("chosenEstimation", estimation);
+        }
     }
 });
 

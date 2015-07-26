@@ -43,9 +43,11 @@ Meteor.publish("estimationsPerRoom", function (roomId) {
     return findAllInRoom("estimations", roomId, this.userId);
 });
 
+// TODO: change to findallinroom
 Meteor.publish("viewersPerRoom", function (roomId) {
     check(roomId, String);
     return Collections.presentation["viewers"].find();
+    //     return findAllInRoom("viewers", roomId, this.userId);
 });
 
 Meteor.publish("featuresPerRoom", function (roomId) {
