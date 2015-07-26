@@ -15,6 +15,26 @@ App.UI.parseForm = function(event) {
     return formContainer;
 };
 
+App.UI.countdown = {};
+
+App.UI.countdown.interval = 100;
+App.UI.countdown.timerStart = 6000;
+App.UI.countdown.count = 6000;
+App.UI.countdown.counter = 0;
+
+App.UI.countdown.timer = function() {
+    App.UI.countdown.count = App.UI.countdown.count - App.UI.countdown.interval;
+    Session.set("timer", App.UI.countdown.count);
+
+    if (App.UI.countdown.count <= 0)
+    {
+        Meteor.clearInterval(App.UI.countdown.counter);
+        Session.set("countingDown", false);
+        Session.set("averageReady", true);
+        App.UI.countdown.count = 6000;
+        return;
+    }
+};
 
 /* */
 App.Collection.remove = function (_id) {

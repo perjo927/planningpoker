@@ -1,4 +1,8 @@
-// TODO: Extract app.collection.remove
+// TODO: Extract app.collection.remove, etc.
+
+var startTimer = function () {
+    App.UI.countdown.counter = Meteor.setInterval(App.UI.countdown.timer, App.UI.countdown.interval);
+};
 
 var makeUserLeaveRoom = function () {
     var docViewer = Session.get("docViewer");
@@ -168,12 +172,39 @@ Template.room_header.events({
     }
 });
 
+/* */
 Template.timer.helpers({
     "isCreator": function (roomCreatorId) {
         return isCreator(roomCreatorId);
+    },
+    "isCountingDown": function () {
+        return Session.get("countingDown");
+    },
+    "seconds": function () {
+        return Math.floor(Session.get("timer")/1000);
+    },
+    "shadowValue": function () {
+        var ms = Session.get("timer");
+        var decimals = ms / 1000; // 5.900, 5.800, 5.700, ...
+        var s = Math.floor(decimals); // 5, 5, 5, ...  4, 4, 4, ... , 3, ...
+        var diff = decimals - s; // 9, 8, 7, 6, ...
+        var shadowValue = diff*15;
+        return shadowValue;
+    },
+    "averageReady": function () {
+        return Session.get("averageReady");
     }
 });
 
+Template.timer.events({
+    "click #timer-start": function () {
+        Session.set("countingDown", true);
+        startTimer();
+        Session.set("averageReady", false);// TODO: fix
+    }
+});
+
+/* */
 Template.estimation.helpers({
     "getEstimate": function () {
         return getEstimateUnit(this.room.estimates, this.estimates);
