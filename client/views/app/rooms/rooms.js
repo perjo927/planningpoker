@@ -15,7 +15,7 @@ var startTimer = function () {
         insertEstimation(estimations, estimation, room._id, Meteor.userId());
         // calculateAverage() + broadcast average för rum
         // flipCards + unFlipCards
-        // TODO: insert into estimations, flip cards, calculate averge
+        // TODO:  flip cards, calculate averge
     };
 
     App.UI.countdown.counter = Meteor.setInterval(App.UI.countdown.timer, App.UI.countdown.interval);

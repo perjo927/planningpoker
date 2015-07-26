@@ -28,7 +28,7 @@ var setRoomViewer = function (viewers, roomId, userId, email) {
     }
 };
 
-// TODO: Auth redirect / Router.go
+// TODO: Auth redirect / iron auth / Router.go
 // TODO: profile settings
 /* */
 Router.route('/', {
