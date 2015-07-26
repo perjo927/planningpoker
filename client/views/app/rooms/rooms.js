@@ -1,6 +1,9 @@
 // TODO: Extract app.collection.remove, etc.
 
 var startTimer = function () {
+    // TODO: reset all estimations .forEach för roomId - kan fucka upp nästa omgångs beräkningar annars
+    // om estimations finns
+
     App.UI.countdown.callback = function() {
         Session.set("countingDown", false);
         Session.set("averageReady", true);
@@ -10,11 +13,11 @@ var startTimer = function () {
         var room = Collections.presentation["rooms"].findOne();
 
         insertEstimation(estimations, estimation, room._id, Meteor.userId());
-        // calculateAverage() + broadcast
+        // calculateAverage() + broadcast average för rum
         // flipCards + unFlipCards
         // TODO: insert into estimations, flip cards, calculate averge
     };
-    // TODO: reset all averages .forEach för roomId
+
     App.UI.countdown.counter = Meteor.setInterval(App.UI.countdown.timer, App.UI.countdown.interval);
 };
 
@@ -173,14 +176,20 @@ var updateRoomEstimate = function (roomId, newValue) {
 //
 Template.room.onRendered(function () {
     this.$('.modal-trigger').leanModal();
+    var that = this;
 
     Streamy.on('startTime', function(d, s) {
-        Session.set("countingDown", true);
-        startTimer();
+        if (d.roomId === that.data.room._id) {
+            Session.set("countingDown", true);
+            startTimer();
+        }
     });
     Streamy.on('resetTime', function(d, s) {
-        Session.set("averageReady", false);
-        Session.set("chosenEstimation", "?");
+        console.warn();
+        if (d.roomId === that.data.room._id) {
+            Session.set("averageReady", false);
+            Session.set("chosenEstimation", "?");
+        }
     });
 });
 
@@ -237,11 +246,11 @@ Template.timer.helpers({
 });
 
 Template.timer.events({
-    "click #timer-start": function () {
-        Streamy.broadcast('startTime', { data: '' });
+    "click #timer-start": function (event, template) {
+        Streamy.broadcast('startTime', { roomId: template.data.room._id });
     },
-    "click #timer-reset": function () {
-        Streamy.broadcast('resetTime', { data: '' });
+    "click #timer-reset": function (event, template) {
+        Streamy.broadcast('resetTime', { roomId: template.data.room._id });
     }
 });
 
