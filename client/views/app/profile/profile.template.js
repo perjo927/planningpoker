@@ -14,6 +14,7 @@ Template.profile.helpers({
     }
 });
 
+
 Template.profile.events({
     "click .edit-profile": function (event) {
         Session.set("editingProfile", event.target.id);
@@ -29,22 +30,7 @@ Template.profile.events({
     "submit form": function (event) {
         event.preventDefault();
         var field = $(event.target).serializeArray()[0];
-
-        // TODO: refactor
-        switch (field.name) {
-            case "username":
-                Meteor.users.update(Meteor.userId(), {$set: {"profile.name": field.value}});
-                break;
-            case "email":
-                Meteor.users.update(Meteor.userId(), {$set: {"emails[0].address": field.value}});
-                break;
-            case "tagline":
-                Meteor.users.update(Meteor.userId(), {$set: {"profile.tagline": field.value}});
-                break;
-            default:
-                break;
-        }
-
+        Profile.updateProfile(field);
         // parse field
         Session.set("editingProfile", false);
     }

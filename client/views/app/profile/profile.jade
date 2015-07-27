@@ -1,4 +1,4 @@
-// TODO: split into templates
+// TODO: split into templates (?)
 template(name="profile")
    .container
       h2.center Profile settings
@@ -14,8 +14,7 @@ template(name="profile")
                      maxlength="30" required title="(5 to 30 characters)" name="email")
                      label.active(for="email") Email
                   .col.s6
-                     button.modal-action.waves-effect.waves-green.btn.left(type='submit', name='action') CREATE / UPDATE
-                     a.waves-effect.waves-light.btn.cancel Cancel
+                     +profile_update_buttons
          else
             each user.emails
                h5
@@ -32,8 +31,7 @@ template(name="profile")
                      maxlength="30" required title="(5 to 30 characters)" name="username")
                      label.active(for="username") Name
                   .col.s6
-                     button.modal-action.waves-effect.waves-green.btn.left(type='submit', name='action') CREATE / UPDATE
-                     a.waves-effect.waves-light.btn.cancel Cancel
+                     +profile_update_buttons
 
          else
             unless user.profile.name
@@ -54,8 +52,7 @@ template(name="profile")
                      maxlength="20" required title="(5 to 20 characters)" name="tagline")
                      label.active(for="tagline") Tagline
                   .col.s6
-                     button.modal-action.waves-effect.waves-green.btn.left(type='submit', name='action') CREATE / UPDATE
-                     a.waves-effect.waves-light.btn.cancel Cancel
+                     +profile_update_buttons
          else
             unless user.profile.tagline
                h5
@@ -97,3 +94,7 @@ template(name="profile")
             img.circle.responsive-img.profile.center(src="img/anon.svg")
          else
             img.circle.responsive-img.profile.center(src="{{user.profile.avatar}}")
+
+template(name="profile_update_buttons")
+   button.modal-action.waves-effect.waves-green.btn.left(type='submit', name='action') SET
+   a.waves-effect.waves-light.btn-flat.cancel Cancel

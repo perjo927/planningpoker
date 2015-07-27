@@ -1,0 +1,10 @@
+template(name="show_rooms")
+    h2 Rooms
+        // Modal Trigger
+        a.btn-floating.btn-large.waves-effect.waves-light.green.right.modal-trigger(href="#room-creator")
+            i.mdi-content-add Add
+    +room_creator
+
+    .row
+        each rooms
+            +room_card

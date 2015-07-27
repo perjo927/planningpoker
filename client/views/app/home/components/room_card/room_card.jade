@@ -1,0 +1,14 @@
+template(name="room_card")
+    .col.s12.m6
+        .card(class="{{color}}")
+            .card-content.white-text
+                span.card-title= roomname
+                if isCreator creator
+                    i#remove-room.mdi-action-highlight-remove.right
+                p= description
+            .card-action
+                a(href='/rooms/{{_id}}') Go to room
+                unless sessionInProgress
+                    span.right ETA {{eta}}
+                else
+                    span.right NOW IN PROGRESS
