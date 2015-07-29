@@ -1,4 +1,6 @@
 // TODO: Extract app.collection.remove, etc.
+// TODO: Namespace and refactor
+
 
 var startTimer = function () {
     resetAverage(Collections.presentation["estimations"]);

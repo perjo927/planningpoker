@@ -123,6 +123,9 @@ template(name="estimation_admin")
 template(name="feature_editor")
    // Modal Structure
    #feature-creator.modal.bottom-sheet
+      // TODO
+      +plugin_youtrack
+
       .modal-content
          .row
             unless editingFeature
@@ -157,6 +160,8 @@ template(name="feature_editor")
       .modal-footer
          //hr
          a#stop-editing.modal-action.modal-close.waves-effect.waves-green.btn-flat.right CANCEL
+
+
 
 //
 template(name="feature_form")
@@ -195,20 +200,20 @@ template(name="feature_form")
 
 //
 template(name="feature_column")
-      ul.collection
-         li.collection-item.avatar
-               i.mdi-editor-mode-edit.circle.edit-feature.teal
-               span.title
-                  a(href="{{link}}" target="_blank")= title
-               p
-                  | {{brand}}
-                  br
-                  |          {{description}}
-               a.secondary-content
-                  i.mdi-action-highlight-remove.remove-feature.pink-text
-                  br
-                  p.flow-text.feature-estimate
-                     b {{estimate}}
+   ul.collection
+      li.collection-item.avatar
+            i.mdi-editor-mode-edit.circle.edit-feature.teal
+            span.title
+               a(href="{{link}}" target="_blank")= title
+            p
+               | {{brand}}
+               br
+               |          {{description}}
+            a.secondary-content
+               i.mdi-action-highlight-remove.remove-feature.pink-text
+               br
+               p.flow-text.feature-estimate
+                  b {{estimate}}
 
 //
 template(name="participants")

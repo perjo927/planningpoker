@@ -1,7 +1,9 @@
-App = {};
-App.UI = {};
-App.Collection = {};
-
+App = {
+    "UI": {},
+    "Collection": {},
+    "Plugin": {},
+    "Http": {}
+};
 
 
 /* */
@@ -89,5 +91,19 @@ App.Collection.find = function (collection, query) {
         return collection.find();
     }
     return collection.find(query);
+};
+
+/* HTTP */
+// TODO: Set App.setCookie
+
+App.Http.call = function (method, url, data, successCallback) {
+    HTTP.call(method, url, data, function (error, result) {
+        if (!!error) {
+            console.error(error);
+        } else {
+            console.info(result);
+            successCallback();
+        }
+    });
 };
 
