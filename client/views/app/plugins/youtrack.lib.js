@@ -4,21 +4,25 @@ var setCookie = function () {
 
 };
 
-var logIn = function () {
+var logIn = function (callback) {
     Meteor.call('getYouTrackBot', function (error, credentials) {
         if (!!error) {
             console.error(error);
         } else {
             // Login
-            var url = "https://tracking.betsson.local/rest/user/login?" +
-                "login=" + credentials.login +
-                "&password=" + credentials.password;
-            var successCallback = function () {
+            var url = "https://tracking.betsson.local/rest/user/login";// + "?login=" + credentials.login +"&password=" + credentials.password;
+            var successCallback = function (result) {
               // TODO: set cookie here
-
+                console.info("result",result);
+                callback(result);
             };
 
-            App.Http.call("POST", url, credentials, successCallback);
+            var res =  App.Http.call("POST", url, {
+                content: "login=" + credentials.login + "&password=" +  credentials.password,
+                headers: {
+                    "Content-Type" :"application/x-www-form-urlencoded"
+                }
+            }, successCallback);
         }
     });
 
@@ -40,8 +44,6 @@ App.Plugin.YouTrack = {};
 //
 App.Plugin.YouTrack.getFromServer = function (features, callback) {
     var that = this;
-    // TODO: If logged in , use cookie
-    logIn();
     var method = "GET";
     var url = "https://tracking.betsson.local/rest/issue?";
     var query = makeQuery("5",
@@ -50,13 +52,22 @@ App.Plugin.YouTrack.getFromServer = function (features, callback) {
     );
     url += query;
 
-    console.debug(url);
+    // TODO: If logged in , use cookie
+    logIn(function () {
+        var successCallback = function (result) {
+            // TODO: that.callback() if callback
+            // TODO: do something with featrues
+            console.debug("result", result);
+        };
+        App.Http.call(method, url, successCallback);
 
-    var successCallback = function (result) {
-      // TODO: that.callback() if callback
-        // TODO: do something with featrues
-    };
+    });
+
+
+
+
 
     // Fetch issues
-    App.Http.call(method, url, successCallback);
+    //console.debug(url);
+
 };

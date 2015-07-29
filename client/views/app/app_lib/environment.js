@@ -102,7 +102,7 @@ App.Http.call = function (method, url, data, successCallback) {
             console.error(error);
         } else {
             console.info(result);
-            successCallback();
+            successCallback(result);
         }
     });
 };
