@@ -1,4 +1,4 @@
-# Plansson
+# Planning Poker
 
 __Planning poker__ by [Per Jonsson](http://www.programmerper.com) 
 

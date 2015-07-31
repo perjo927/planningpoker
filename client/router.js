@@ -1,4 +1,4 @@
-
+// TODO: MOVE TO LIB
 var renderDefault = function(router) {
 
     router.render('navbar', {
