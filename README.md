@@ -16,6 +16,12 @@ $ meteor
 
 _That's it_.
 
+* Deploy your own instance
+
+```sh
+$ meteor deploy <yourcoolappname>.meteor.com
+```
+
 ### License
 
 
