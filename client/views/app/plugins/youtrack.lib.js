@@ -10,16 +10,17 @@ var logIn = function (callback) {
             console.error(error);
         } else {
             // Login
-            var url = "https://tracking.betsson.local/rest/user/login";// + "?login=" + credentials.login +"&password=" + credentials.password;
+            var url = "https://tracking.betsson.local/rest/user/login";//
             var successCallback = function (result) {
               // TODO: set cookie here
-                console.info("result",result);
+                console.info("result",result.headers);
                 callback(result);
             };
 
             var res =  App.Http.call("POST", url, {
                 content: "login=" + credentials.login + "&password=" +  credentials.password,
                 headers: {
+                    "Cache-Control": "no-cache",
                     "Content-Type" :"application/x-www-form-urlencoded"
                 }
             }, successCallback);
@@ -57,7 +58,7 @@ App.Plugin.YouTrack.getFromServer = function (features, callback) {
         var successCallback = function (result) {
             // TODO: that.callback() if callback
             // TODO: do something with featrues
-            console.debug("result", result);
+            console.debug("result", result.headers);
         };
         App.Http.call(method, url, successCallback);
 
