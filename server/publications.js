@@ -2,6 +2,8 @@
 var findAllInRoom = function (collection, roomId, userId) {
     check(collection, String);
     check(roomId, String);
+    check(userId, String);
+
 
     if (!!userId) {
         return Collections.presentation[collection].find({roomId: roomId});
